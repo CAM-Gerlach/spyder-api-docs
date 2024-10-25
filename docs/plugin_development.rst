@@ -503,7 +503,7 @@ Widgets
 ~~~~~~~
 
 The best way to start building our plugin is to implement its graphical components in the ``widgets.py`` file.
-Let's call the initial unedited version ``INITIAL``.
+Let us call the initial unedited version ``INITIAL``.
 
 In `INITIAL`_, the ``widgets.py`` file is as follows:
 
@@ -621,7 +621,7 @@ The next step in developing our plugin is to create an instance of the widget we
 To do this, we need to use a container.
 Due to the specificities of Qt, we need an instance of ``QWidget`` (the container) to be the parent of all the other widgets in our plugin (as we explained in the section :ref:`structure of a plugin <tutorial-structure-details>`).
 
-Thus, the `COOKIECUTTER`_ version of the ``container.py`` file is:
+Thus, the `Cookiecutter`_ version of the ``container.py`` file is:
 
 .. code-block:: python
 
@@ -669,8 +669,8 @@ Then, we edit the ``setup`` method to add an instance of our widget.
 Plugin
 ~~~~~~
 
-Finally, we define our plugin so that it is registered within Spyder.
-The `INITIAL`_ version (i.e. the one created by cookiecutter)  for ``plugin.py`` is:
+Finally, we define our plugin to be registered within Spyder.
+The `INITIAL`_ version (i.e. the one created by cookiecutter) for the ``plugin.py`` file is:
 
 * Imports:
 
@@ -713,7 +713,7 @@ The `INITIAL`_ version (i.e. the one created by cookiecutter)  for ``plugin.py``
             return _("Spyder Pomodoro Timer")
 
         def get_description(self):
-            return _("A very simple pomodoro timer")
+            return _("A very simple Pomodoro timer")
 
         def get_icon(self):
             return QIcon()
@@ -735,13 +735,14 @@ The `INITIAL`_ version (i.e. the one created by cookiecutter)  for ``plugin.py``
 .. _INITIAL -> HELLO WORLD plugin.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/d368e695e096e1a054e043671f98b5f0021b6822
 
 First, we need to declare the dependencies of our plugin, by defining the ``REQUIRES`` class constant.
-Since we're going to add a status bar widget, we require the ``StatusBar`` plugin, as shown below.
+As we are going to add a status bar widget, we need the ``StatusBar`` plugin, as shown below.
 
 .. code-block:: python
 
        REQUIRES = [Plugins.StatusBar]
 
-Then we need to set the icon for our plugin. For that, we substitute
+Then, we need to set the icon for our plugin.
+For that, we substitute
 
 .. code-block:: python
 
@@ -781,7 +782,7 @@ Due to recent changes to the Spyder API, we need to add to the spyder imports
    # Spyder imports
    from spyder.api.plugin_registration.decorators import on_plugin_available
 
-And add the following after the ``on_initialize`` method:
+And add the following code after the ``on_initialize`` method:
 
 .. code-block:: python
 
@@ -791,7 +792,7 @@ And add the following after the ``on_initialize`` method:
            if statusbar:
                statusbar.add_status_widget(self.pomodoro_timer_status)
 
-With these changes, Spyder will be aware of the presence of our plugin, and that this plugin adds a new widget to the status bar.
+Taking these changes into account, Spyder will recognize the presence of our plugin and identify that it adds a new widget to the status bar.
 
 Finally, we add the following method to our plugin:
 
@@ -802,17 +803,18 @@ Finally, we add the following method to our plugin:
        container = self.get_container()
        return container.pomodoro_timer_status
 
-In this way, ``SpyderPomodoroTimer`` can access ``pomodoro_timer_status`` of ``SpyderPomodoroTimerContainer`` as if it were its own property.
+In this way, ``SpyderPomodoroTimer`` can access ``pomodoro_timer_status`` of ``SpyderPomodoroTimerContainer`` as if it were its own.
 
 In summary, we did the following:
 
 .. image:: images/workshop-3/pd_plugin_build.png
    :alt: Basic structure of Pomodoro Timer Spyder plugin.
 
-We created a widget, then we added it to the container, which is registered in the plugin through the ``CONTAINER_CLASS`` constant.
+We created a widget and added it to the container, which is registered in the plugin through the ``CONTAINER_CLASS`` constant.
 In the plugin, we accessed the instance of that widget and added it to the status bar.
 
 .. _INITIAL: https://github.com/map0logo/spyder-pomodoro-timer/tree/v0.1.1-dev0
+
 
 ======================
 How to test our plugin
