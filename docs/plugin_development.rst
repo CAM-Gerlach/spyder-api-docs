@@ -816,34 +816,37 @@ In the plugin, we accessed the instance of that widget and added it to the statu
 .. _INITIAL: https://github.com/map0logo/spyder-pomodoro-timer/tree/v0.1.1-dev0
 
 
-======================
-How to test our plugin
-======================
+==================
+Testing our plugin
+==================
 
 Now it is time to see how our plugin looks in the Spyder interface.
 
 **From the root folder of our plugin**, we activate the environment where Spyder is installed, and run:
 
-.. code-block:: bash
+.. code-block:: shell
 
    (base) $ conda activate spyder-dev
    (spyder-dev) $ pip install -e .
 
 
-Now we can see two outputs. The first one is shown in the command line:
+Now we can see two outputs.
+The first output is shown in the command line:
 
-.. code-block:: bash
+.. code-block:: shell
 
    (spyder-dev) $ spyder
    SpyderPomodoroTimer registered!
 
-And in Spyder you'll see our plugin in the status bar with the tooltip "I am the Pomodoro tooltip".
+The second output is shown in Spyder, as Figure 4 presents, where you will see our plugin in the status bar with the tooltip "I am the Pomodoro tooltip".
 
-.. image:: images/workshop-3/pd_hello_world.png
-   :alt: First version of our plugin
+.. figure:: images/workshop-3/pd_hello_world.png
+   :alt: figure4
 
-Keep in mind that every time we make a change to our code, it is necessary to restart Spyder so that the plugin is reloaded and we can check the changes.
+   Figure 4: First version of our plugin
 
+.. hint::
+   Keep in mind that every time we make a change to the code, it is necessary to restart Spyder to reload our plugin and check the changes.
 
 
 ====================
