@@ -851,22 +851,22 @@ And as :ref:`Figure 4 <tutorial-figure-4>` presents, you should see our plugin i
 Enhancing our plugin
 ====================
 
-From now on we are going to go into details of how things are implemented in Qt. So in case you have any doubts, the Qt documentation will be your best guide.
-We created an annex to this tutorial that quickly explains way the fundamental concepts of Qt for those in a hurry: :ref:`qt-fundamentals`.
+From now on, let is get into the details of how things are implemented in Qt.
+So if you have any doubts, the `Qt`_ documentation will be your best guide.
+We have created an annex to this tutorial that quickly explains the basics of Qt for those in a hurry: :ref:`qt-fundamentals`.
 
-Timer updates
-~~~~~~~~~~~~~
+At this point, we have created and tested our plugin.
+The plugin displays the time in the toolbar of Spyder, but the Pomodoro timer is not being updated.
+To change this situation, in this section, we will enhance the plugin using the ``QTimer`` in ``PomodoroTimerStatus`` (it is present because it is an instance of ``BaseTimerStatus``) to update the time in the toolbar.
 
-The first problem with our plugin is that its Pomodoro timer is not being updated.
-To activate it we can use the ``QTimer`` in ``PomodoroTimerStatus``, which is present because it's an instance of ``BaseTimerStatus``.
-
-The second version where the value in the status bar is updated is called ``TIMER``.
-
-Let's go back to ``widgets.py`` and add this constant below the import lines (line 22).
+The second version of the ``widgets.py`` file where the value is updated in the status bar is called ``TIMER``.
+The required changes are explained below.
 
 `HELLO WORLD -> TIMER widgets.py diff`_
 
 .. _HELLO WORLD -> TIMER widgets.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/5d72eaf2c8ce6c7760529c90121837e275757974
+
+Let is go back to ``widgets.py`` and add these constants below the import lines (line 22).
 
 .. code-block:: python
 
@@ -876,7 +876,7 @@ Let's go back to ``widgets.py`` and add this constant below the import lines (li
    POMODORO_DEFAULT = 25 * 60 * 1000  # 25 mins in milliseconds
    INTERVAL = 1000
 
-``POMODORO_DEFAULT`` is to set the Pomodoro time limit in milliseconds, and ``INTERVAL`` to the timer update rate.
+``POMODORO_DEFAULT`` is to set the Pomodoro time limit in milliseconds and ``INTERVAL`` to update the timer rate.
 
 Now, in the ``__init__`` method of ``PomodoroTimerStatus`` we need to add:
 
@@ -890,12 +890,19 @@ Now, in the ``__init__`` method of ``PomodoroTimerStatus`` we need to add:
        self.timer.timeout.connect(self.update_timer)
        self.timer.start(self._interval)
 
-Up to this point, we created a default value (``POMODORO_DEFAULT``) for the timer duration during pomodoros; we added it to the ``pomodoro_limit`` attribute to be able to configure it; and with that value we initialized the ``countdown`` attribute that will be modified over time.
-As for the update interval of the timer, we set it to to the value of ``INTERVAL``, which corresponds to 1 second (one thousand milliseconds).
+Up to this point, we have done the following changes:
 
-The function of ``self.timer`` is to update our timer periodically. This is done through the method ``timeout.connect()``, to which we pass as parameter the reference to the ``update_timer`` function that will perform the required adjustments.
+* We created the constant ``POMODORO_DEFAULT`` with a default value for the timer duration during pomodoros.
 
-Now let's implement ``update_timer`` at the end of the file:
+* We assigned the constant to the ``pomodoro_limit`` attribute to be able to configure it.
+
+* We initialized the ``countdown`` attribute with the value of ``pomodoro_limit``, so that will be modified over time.
+
+* Regarding the update interval of the timer, we set it to the value of ``INTERVAL`` that corresponds to 1 second (one thousand milliseconds).
+
+* The function of ``self.timer`` is to update our timer periodically. This is done through the ``timeout.connect()`` method, to which we pass as parameter the reference to the ``update_timer`` function that will perform the required adjustments.
+
+Now let is implement ``update_timer`` at the end of the ``widgets.py`` file:
 
 .. code-block:: python
 
@@ -907,8 +914,8 @@ Now let's implement ``update_timer`` at the end of the file:
            return f"{minutes:02d}:{seconds:02d}"
 
        def update_timer(self):
-           """Updates the timer and the current widget. Also, update the
-           task counter if a task is set."""
+           """Update the timer and the current widget. It also updates the
+           task counter if a task is a set."""
 
            if self.countdown > 0:
                # Update the current timer by decreasing the current running time by one second
@@ -916,9 +923,9 @@ Now let's implement ``update_timer`` at the end of the file:
                self.value = self.display_time()
 
 Here we rely on the ``display_time`` method that converts the current ``countdown`` value, which is measured in milliseconds, into a human-readable format.
-And ``update_timer`` simply keeps updating the countdown until it reaches zero.
+The ``update_timer`` method simply keeps updating the countdown until it reaches zero.
 
-If we run Spyder again we will find that our timer has come to life.
+If we run Spyder again, we will see that our timer has started counting down.
 
 .. image:: images/workshop-3/pd_timer_countdown.gif
    :alt: Timer countdown working.
