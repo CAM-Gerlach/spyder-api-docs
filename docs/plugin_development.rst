@@ -847,9 +847,9 @@ And as :ref:`Figure 4 <tutorial-figure-4>` presents, you should see our plugin i
 
 
 
-====================
-Enhancing our plugin
-====================
+=================================================
+Enhancing our plugin to update the Pomodoro timer
+=================================================
 
 From now on, let is get into the details of how things are implemented in Qt.
 So if you have any doubts, the `Qt`_ documentation will be your best guide.
@@ -931,29 +931,37 @@ If we run Spyder again, we will see that our timer has started counting down.
    :alt: Timer countdown working.
 
 
-==============
-Timer controls
-==============
+==============================================
+Improving our plugin to include timer controls
+==============================================
 
-Now we need a way to control our timer.
-We can achieve this by adding some buttons to Spyder's toolbar, which will be useful to learn how to work with toolbars, menus and actions in Spyder.
+Now that our plugin updates the timer in the Spyder's toolbar, we will perform a second improvement to control the timer.
+We can accomplish this goal by doing the following activities.
+First, we will create an instance of the Spyder Application Toolbar.
+Second, we will create a new section in the new toolbar to add some actions using buttons.
+Third, we will implement the behaviour of the new toolbar and its actions.
+Fourth, we will register the new toolbar.
+Finally, we will review the improvements in Spyder.
+Implementing the changes to control the timer will be useful to learn how to work with toolbars, menus, and actions in Spyder.
 
-PomodoroTimerToolbar
-~~~~~~~~~~~~~~~~~~~~
+
+Creating an instance of Spyder application toolbar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The next version where actions are added to the toolbar is called ``ACTIONS``.
+The required changes are explained below.
 
 `TIMER -> ACTIONS widgets.py diff`_
 
 .. _TIMER -> ACTIONS widgets.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/48a946fdbb934b9b85facd3c1b77fc8999e049a9
 
-Let's go back to ``widgets.py`` and import the Spyder application toolbar class:
+Let is go back to the ``widgets.py`` file and import the Spyder Application Toolbar class:
 
 .. code-block:: python
 
    from spyder.api.widgets.toolbars import ApplicationToolbar
 
-And create an instance of it by adding the following code before the definition of ``PomodoroTimerStatus``:
+Then, create an instance by adding the following code before the ``PomodoroTimerStatus`` class definition:
 
 .. code-block:: python
 
@@ -962,20 +970,20 @@ And create an instance of it by adding the following code before the definition 
 
        ID = 'pomodoro_timer_toolbar'
 
-As you can see, this statement is very simple. It only needs to declare an ``ID``, that serves to identify our toolabr among the rest.
+As you can see, this statement is very simple.
+You only needs to declare an ``ID`` which serves to identify our toolbar among the other existing toolbars.
 
-It is possible to include other Qt widgets in our toolbar, but in this case it's better to use the appropriate Spyder methods for that in order to maintain their relationship with the rest of the application.
+It is possible to include other Qt widgets in our toolbar, but in this case it is better to use the appropriate Spyder methods for this in order to keep their relationship with the rest of the application.
 In other words, as long as the widget you need exists in ``spyder.api.widgets``, use it!
 
-
 Next, we need to declare a boolean variable in our status widget to indicate if the countdown is paused or not.
-For that, let's add the following inside the ``__init__`` method of ``PomodoroTimerStatus``:
+For that, let is add the following code inside the ``__init__`` method of the ``PomodoroTimerStatus`` class definition:
 
 .. code-block:: python
 
    self.pause = True
 
-And inside the ``update_timer`` method, substitute
+And inside the ``update_timer`` method of the same class, please substitute
 
 .. code-block:: python
 
