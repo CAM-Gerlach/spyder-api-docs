@@ -1032,17 +1032,23 @@ It also includes the actions identified as "start_timer", "pause_timer" and "sto
 
 The use of simple class definitions with class constants facilitates the encapsulation and exchange of this information in a simple way.
 
-Implementing the behaviour of toolbar's actions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Implementing the behaviour of the Pomodoro timer toolbar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now let us implement the behavior of our new Pomodoro timer toolbar and its actions.
+Because we are going to specify the relationship between our plugin widgets and other areas of Spyder, we are making changes to the ``container.py`` file.
+In these changes, we do not specify the internal behavior of our plugin.
+
+The next version of the code that reflects the addition of the behaviours is called ``ACTIONS``.
+The required changes are explained below.
 
 `TIMER -> ACTIONS container.py diff`_
 
 .. _TIMER -> ACTIONS container.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/492f30771285af937a8a75d69e4e879d21f9dc0f
 
-Now let's go to ``container.py``, where we are going to implement the behavior of our new toolbar and its actions.
-In this case, we are not going to specify the internal behavior of our plugin, but the relationship between its widgets and other areas of Spyder, so it is more convenient to do it in the container.
-
-As we did with ``PomodoroTimerStatus``, we are going to use ``qtawesome`` icons for our actions. For this purpose, let's add at the beginning of our imports:
+As we did with the ``PomodoroTimerStatus`` class, we will use ``QtAwesome`` icons for our actions.
+We also use the ``QToolButton`` class to set the button that will be added to our toolbar.
+To do this, we will add the following code to the beginning of our imports:
 
 .. code-block:: python
 
@@ -1050,15 +1056,13 @@ As we did with ``PomodoroTimerStatus``, we are going to use ``qtawesome`` icons 
    import qtawesome as qta
    from qtpy.QtWidgets import QToolButton
 
-We also imported ``QToolButton`` because it will be used to set the button that we will add in our toolbar.
-
-At the end of the Spyder imports we also need:
+At the end of the Spyder imports, we also need:
 
 .. code-block:: python
 
    from spyder.utils.icon_manager import ima
 
-Now, let's include ``PomodoroTimerToolbar`` and the actions and sections we just declared in ``api.py`` in our local imports:
+Now let us include the following local imports from the ``widgets.py`` and ``api.py`` files:
 
 .. code-block:: python
 
@@ -1072,16 +1076,16 @@ Now, let's include ``PomodoroTimerToolbar`` and the actions and sections we just
        PomodoroMenuSections,
    )
 
-Next, we need to do following things in the ``setup`` method of ``SpyderPomodoroTimerContainer``.
+Next, we need to do following in the ``setup`` method of the ``SpyderPomodoroTimerContainer`` class.
 
-The first one is to create an instance of the toolbar class we declared earlier:
+First, create an instance of the ``PomodoroTimerToolbar`` class that we declared previously:
 
 .. code-block:: python
 
            title = _("Pomodoro Timer Toolbar")
            self.pomodoro_timer_toolbar = PomodoroTimerToolbar(self, title)
 
-The second one is to create the actions corresponding to Start, Pause and Stop our Pomodoro timer:
+Second, create the actions corresponding to start, pause, and stop our Pomodoro timer:
 
 .. code-block:: python
 
@@ -1110,7 +1114,9 @@ The second one is to create the actions corresponding to Start, Pause and Stop o
                triggered=self.stop_pomodoro_timer,
            )
 
-The third one is to create the menu that will contain our actions and add them to it.
+When creating actions, we indicate by means of the ``triggered`` parameter the methods that will be executed when they are activated, i.e. when the corresponding toolbar buttons are clicked.
+
+Third, create the menu that will contain our actions and add them to it.
 
 .. code-block:: python
 
@@ -1128,7 +1134,7 @@ The third one is to create the menu that will contain our actions and add them t
                    section=PomodoroMenuSections.Main,
                )
 
-The fourth one is to create a button that will contain the menu and configure it as ``PopupMode``, so that it is displayed when clicked.
+Fourth, create a button that will contain the menu and configure it as ``PopupMode`` (it is displayed when clicking).
 
 .. code-block:: python
 
@@ -1141,7 +1147,7 @@ The fourth one is to create a button that will contain the menu and configure it
            self.pomodoro_button.setMenu(self.pomodoro_menu)
            self.pomodoro_button.setPopupMode(QToolButton.InstantPopup)
 
-And finally, the fifth one is to add the button to our toolbar:
+Fifth, add the ``pomodoro_button`` to our toolbar:
 
 .. code-block:: python
 
@@ -1152,9 +1158,7 @@ And finally, the fifth one is to add the button to our toolbar:
                section=PomodoroToolbarSections.Controls,
            )
 
-When creating the actions, we indicate by means of the ``triggered`` parameter the methods to be executed when they are activated, i.e. when the corresponding buttons on the toolbar are clicked.
-
-We can insert these methods at the end of the ``SpyderPomodoroTimerContainer`` declaration, in the section that our cookiecutter template indicates as ``# --- Public API``.
+Finally, we can insert the following methods at the end of the ``SpyderPomodoroTimerContainer`` declaration, in the section that our cookiecutter template indicates as ``# --- Public API``.
 
 .. code-block:: python
 
@@ -1174,7 +1178,7 @@ We can insert these methods at the end of the ``SpyderPomodoroTimerContainer`` d
                self.pomodoro_timer_status.pause = True
                self.pomodoro_timer_status.countdown = self.pomodoro_timer_status.pomodoro_limit
 
-These methods simply manipulate the ``pause`` field of ``pomodoro_timer_status``, and in the case of ``stop_pomodoro_timer`` the countdown is restarted.
+These methods simply manipulate the ``pause`` field of ``pomodoro_timer_status``. In the case of ``stop_pomodoro_timer``, the countdown is restarted.
 
 Register the toolbar
 ~~~~~~~~~~~~~~~~~~~~
