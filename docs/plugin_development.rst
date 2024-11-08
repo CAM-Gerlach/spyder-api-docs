@@ -1180,22 +1180,24 @@ Finally, we can insert the following methods at the end of the ``SpyderPomodoroT
 
 These methods simply manipulate the ``pause`` field of ``pomodoro_timer_status``. In the case of ``stop_pomodoro_timer``, the countdown is restarted.
 
-Register the toolbar
-~~~~~~~~~~~~~~~~~~~~
+Registering the Pomodoro timer toolbar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A final mandatory step is to register the new ``pomodoro_timer_toolbar`` component in the ``plugin.py`` file.
+
+The next version of the code that reflects the addition of the actions is called ``ACTIONS``.
 
 `TIMER -> ACTIONS plugin.py diff`_
 
 .. _TIMER -> ACTIONS plugin.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/012c5ef6568114ea945501d44efb30afeefbad98
 
-A final mandatory step is to go to ``plugin.py`` and register this new toolbar component.
-
-To do this, add ``Plugins.Toolbar`` to the plugin requirements:
+To register, add ``Plugins.Toolbar`` to the plugin requirements:
 
 .. code-block:: python
 
        REQUIRES = [Plugins.StatusBar, Plugins.Toolbar]
 
-And use this plugin's API to add the toolbar we have created in the container to Spyder's toolbar.
+And use this plugin's API to add the toolbar, which we have created in the container, to Spyder toolbar.
 
 .. code-block:: python
 
@@ -1205,23 +1207,23 @@ And use this plugin's API to add the toolbar we have created in the container to
            toolbar = self.get_plugin(Plugins.Toolbar)
            toolbar.add_application_toolbar(container.pomodoro_timer_toolbar)
 
-Review the changes
-~~~~~~~~~~~~~~~~~~
+Reviewing the changes
+~~~~~~~~~~~~~~~~~~~~~
+Once Spyder is deployed, we can notice the following changes:
 
-The first thing we can notice is that we already have the corresponding buttons in the toolbar.
+First, we can see that we already have the corresponding buttons in the toolbar.
 
 .. image:: images/workshop-3/pd_toolbar_actions.gif
-   :alt: Pomodoro timer toolbar buttons
+   :alt: Pomodoro timer toolbar's buttons
 
-The strings that were entered as the ``tip`` parameter in the creation of the actions are shown here as the buttons' tooltips.
+Second, the values of the ``tip`` parameters, included in the creation of the actions, are shown as tooltips of the buttons.
 
-Also, if we check the menu "View > Toolbars", we find that there is a new entry there corresponding to our toolbar.
+Third, if we check the "View > Toolbars" menu, we will find that there is a new entry corresponding to our toolbar.
 
 .. image:: images/workshop-3/pd_view_pomodoro_toolbar.png
    :alt: View > Toolbars menu with "Pomodoro Timer Toolbar" option.
 
-
-Finally, let's check how the new Pomodoro Timer control buttons in the toolbar interact with the component in the status bar.
+Finally, let us check how the Pomodoro timer control buttons on the toolbar interact with the status bar component.
 
 .. image:: images/workshop-3/pd_toolbar_statusbar_interact.gif
    :alt: Interaction between the Pomodoro Timer toolbar and its status bar.
