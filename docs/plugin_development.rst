@@ -857,7 +857,7 @@ We have created an annex to this tutorial that quickly explains the basics of Qt
 
 At this point, we have created and tested our plugin.
 The plugin displays the time in the toolbar of Spyder, but the Pomodoro timer is not being updated.
-To change this situation, in this section, we will enhance the plugin using the ``QTimer`` in ``PomodoroTimerStatus`` (it is present because it is an instance of ``BaseTimerStatus``) to update the time in the toolbar.
+To change this situation, in this section, we will enhance the plugin using the ``QTimer`` in the ``PomodoroTimerStatus`` class (it is present because it is an instance of ``BaseTimerStatus``) to update the time in the toolbar.
 
 The second version of the ``widgets.py`` file where the value is updated in the status bar is called ``TIMER``.
 The required changes are explained below.
@@ -878,7 +878,7 @@ Let us go back to the ``widgets.py`` file and add these constants below the impo
 
 ``POMODORO_DEFAULT`` is to set the Pomodoro time limit in milliseconds and ``INTERVAL`` to update the timer rate.
 
-Now, in the ``__init__`` method of ``PomodoroTimerStatus`` we need to add:
+Now, in the ``__init__`` method of the ``PomodoroTimerStatus`` class, we need to add:
 
 .. code-block:: python
 
@@ -937,18 +937,20 @@ Improving our plugin to include timer controls
 
 Now that our plugin updates the timer in the Spyder's toolbar, we will perform a second improvement to control the timer.
 We can accomplish this goal by doing the following activities.
-First, we will create an instance of the Spyder Application Toolbar.
-Second, we will create a new section in the new toolbar to add some actions using buttons.
-Third, we will implement the behaviour of the new toolbar and its actions.
-Fourth, we will register the new toolbar.
-Finally, we will review the improvements in Spyder.
+First, :ref:`creating-instance`.
+Second, :ref:`adding-actions`.
+Third, :ref:`implementing_behavior`.
+Fourth, :ref:`registering_toolbar`.
+Finally, :ref:`reviewing_changes`.
 Implementing the changes to control the timer will be useful to learn how to work with toolbars, menus, and actions in Spyder.
 
 
-Creating an instance of the Spyder application toolbar
+.. _creating-instance:
+
+Creating an instance of the Spyder Application Toolbar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The next version of the code that reflects the addition of the toolbar is called ``TOOLBAR``.
+The next version of the code that reflects the addition of the toolbar is called ``TOOLBAR`` and it is related to the ``widgets.py`` file.
 The required changes are explained below.
 
 `TIMER -> TOOLBAR widgets.py diff`_
@@ -971,9 +973,9 @@ Then, create an instance by adding the following code before the ``PomodoroTimer
        ID = 'pomodoro_timer_toolbar'
 
 As you can see, this statement is very simple.
-You only needs to declare an ``ID`` which serves to identify our toolbar among the other existing toolbars.
+You only need to declare an ``ID`` which serves to identify our toolbar among the other existing toolbars.
 
-It is possible to include other Qt widgets in our toolbar, but in this case it is better to use the appropriate Spyder methods for this in order to keep their relationship with the rest of the application.
+It is possible to include other Qt widgets in our toolbar, but in this case, it is better to use the appropriate Spyder methods to keep their relationship with the rest of the application.
 In other words, as long as the widget you need exists in ``spyder.api.widgets``, use it!
 
 Next, we need to declare a boolean variable in our status widget to indicate if the countdown is paused or not.
@@ -997,13 +999,15 @@ by
            if self.countdown > 0 and not self.pause:
                ...
 
+.. _adding-actions:
+
 Adding some actions to our new Pomodoro timer toolbar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now we are going to create a new section in our toolbar and associate some functionality to it by means of actions.
 This particular code is recommended to be included in the ``api.py`` file because this way we can offer endpoints to the rest of Spyder and new plugins to adjust the behavior of our plugin.
 
-The next version of the code that reflects the addition of the actions is called ``ACTIONS``.
+The next version of the code that reflects the addition of the actions is called ``ACTIONS`` and it is related to the ``api.py`` file.
 The required changes are explained below.
 
 `TIMER -> ACTIONS api.py diff`_
@@ -1019,27 +1023,29 @@ Let us add the following code to the end of the ``api.py`` file:
        Pause = 'pause_timer'
        Stop = 'stop_timer'
 
-
    class PomodoroToolbarSections:
        Controls = "pomodoro_timer"
 
    class PomodoroMenuSections:
        Main = "main_section"
 
-These changes inform Spyder and our plugin about the new section called "pomodoro_timer" in the Pomodoro timer toolbar.
-The pomodoro_timer section consists of a button containing a menu (with a single "main_section" section).
-It also includes the actions identified as "start_timer", "pause_timer" and "stop_timer", which will respectively start, pause, and stop (resetting) our timer.
+These changes inform Spyder and our plugin about the new section called ``pomodoro_timer`` in the Pomodoro timer toolbar.
+The ``pomodoro_timer`` section consists of a button containing a menu (with a single ``main_section`` section).
+It also includes the actions identified as ``start_timer``, ``pause_timer`` and ``stop_timer``, which will respectively start, pause, and stop (resetting) our timer.
 
-The use of simple class definitions with class constants facilitates the encapsulation and exchange of this information in a simple way.
+.. hint::
+   The use of simple class definitions with class constants facilitates the encapsulation and exchange of this information in a simple way.
 
-Implementing the behaviour of the Pomodoro timer toolbar
+.. _implementing_behavior:
+
+Implementing the behavior of the Pomodoro timer toolbar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now let us implement the behavior of our new Pomodoro timer toolbar and its actions.
 Because we are going to specify the relationship between our plugin widgets and other areas of Spyder, we are making changes to the ``container.py`` file.
 In these changes, we do not specify the internal behavior of our plugin.
 
-The next version of the code that reflects the addition of the behaviours is called ``ACTIONS``.
+The next version of the code that reflects the addition of the behaviors is called ``ACTIONS`` and it is related to the ``container.py`` file.
 The required changes are explained below.
 
 `TIMER -> ACTIONS container.py diff`_
@@ -1076,7 +1082,7 @@ Now let us include the following local imports from the ``widgets.py`` and ``api
        PomodoroMenuSections,
    )
 
-Next, we need to do following in the ``setup`` method of the ``SpyderPomodoroTimerContainer`` class.
+Next, we need to do the following changes in the ``setup`` method of the ``SpyderPomodoroTimerContainer`` class.
 
 First, create an instance of the ``PomodoroTimerToolbar`` class that we declared previously:
 
@@ -1180,12 +1186,14 @@ Finally, we can insert the following methods at the end of the ``SpyderPomodoroT
 
 These methods simply manipulate the ``pause`` field of ``pomodoro_timer_status``. In the case of ``stop_pomodoro_timer``, the countdown is restarted.
 
+.. _registering_toolbar:
+
 Registering the Pomodoro timer toolbar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A final mandatory step is to register the new ``pomodoro_timer_toolbar`` component in the ``plugin.py`` file.
 
-The next version of the code that reflects the addition of the actions is called ``ACTIONS``.
+The next version of the code that reflects the addition of the actions is called ``ACTIONS`` and it is related to the ``plugin.py`` file.
 
 `TIMER -> ACTIONS plugin.py diff`_
 
@@ -1206,6 +1214,8 @@ And use this plugin's API to add the toolbar, which we have created in the conta
            container = self.get_container()
            toolbar = self.get_plugin(Plugins.Toolbar)
            toolbar.add_application_toolbar(container.pomodoro_timer_toolbar)
+
+.. _reviewing_changes:
 
 Reviewing the changes
 ~~~~~~~~~~~~~~~~~~~~~
