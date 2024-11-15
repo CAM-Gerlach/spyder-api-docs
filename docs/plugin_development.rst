@@ -1398,11 +1398,15 @@ The ``@on_conf_change`` decorator is responsible for capturing the signal genera
 Registering preferences
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Finally, it is necessary to activate the use of preferences in ``plugin.py``, by requiring the Preferences plugin
+Finally, it is necessary to activate the use of preferences in the ``plugin.py`` file.
+
+The final version in which we activate the preferences will be called ``CONFPAGE`` and it is related to the ``plugin.py`` file.
 
 `ACTIONS -> CONFPAGE plugin.py diff`_
 
 .. _ACTIONS -> CONFPAGE plugin.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/b238b133d46a52e2d6e57ae938964094a45e7177
+
+We will include the ``Plugin.Preferences`` in the list of ``REQUIRES``
 
 .. code-block:: python
 
@@ -1411,7 +1415,7 @@ Finally, it is necessary to activate the use of preferences in ``plugin.py``, by
        REQUIRES = [Plugins.Preferences, Plugins.StatusBar, Plugins.Toolbar]
 
 
-and registering our plugin in a method with the decorator ``@on_plugin_available``.
+and register our plugin in a method with the decorator ``@on_plugin_available``.
 
 .. code-block:: python
 
@@ -1420,16 +1424,14 @@ and registering our plugin in a method with the decorator ``@on_plugin_available
            preferences = self.get_plugin(Plugins.Preferences)
            preferences.register_plugin_preferences(self)
 
-Now we can access the Preferences window either from the toolbar or from the "Tools > Preferences" menu.
-There we will find a section called *Spyder Pomodoro Timer* and inside it is the *Pomodoro timer limit* parameter.
+The preferences window can now be accessed from the toolbar or from the “Tools > Preferences” menu.
+There, we will find a section called *Spyder Pomodoro Timer* and inside it is the *Pomodoro timer limit* parameter.
 If we change that value, we will see how the corresponding label in the status bar changes.
 
 .. image:: images/workshop-3/pd_plugin_confpage.gif
    :alt: Pomodoro Timer toolbar configuration page.
 
-Now your plugin is in an initial version ready to publish...
-
-
+Now your plugin is in an initial version ready to be published...
 
 ======================
 Publishing your plugin
