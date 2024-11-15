@@ -1344,14 +1344,19 @@ Each parameter corresponds to a ``QGridLayout`` where labels and inputs (in this
 .. hint::
    Configuration pages in Spyder provide some helper methods to facilitate this work. For instance, ``create_spinbox`` allows to instantiate and initialize in one single step the widgets corresponding to the prefix an suffix labels together with the spinbox.
 
-Propagate configuration changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Since we moved all the configuration information to ``conf.py``, now we have to import it from there into ``widgets.py``.
+Propagating configuration changes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Since we moved all the configuration information to the ``conf.py`` file, now we have to import it into the ``widgets.py`` file.
+
+The final version in which we propagate the configuration changes will be called ``CONFPAGE`` and it is related to the ``widgets.py`` file.
 
 `ACTIONS -> CONFPAGE widgets.py diff`_
 
 .. _ACTIONS -> CONFPAGE widgets.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/b94cee118bf887b52934230a35d67a0080551a68
+
+We will write in the ``widgets.py`` file the following code:
 
 .. code-block:: python
 
@@ -1362,8 +1367,16 @@ Since we moved all the configuration information to ``conf.py``, now we have to 
        CONF_VERSION,
    )
 
+In the class ``PomodoroTimerStatus`` after the ID declaration, we will include the following code:
+
+.. code-block:: python
+
+   CONF_SECTION = CONF_SECTION
+   CONF_DEFAULTS = CONF_DEFAULTS
+   CONF_VERSION = CONF_VERSION
+
 Now we can access the configuration options from anywhere in our plugin using the ``get_conf`` method.
-In this case we use it to access the value of ``pomodoro_limit`` from the configuration instead of the constant ``POMODORO_DEFAULT``.
+In this case we use this method to access ``pomodoro_limit`` value of the configuration instead of the ``POMODORO_DEFAULT`` constant.
 
 .. code-block:: python
 
@@ -1371,8 +1384,8 @@ In this case we use it to access the value of ``pomodoro_limit`` from the config
                "pomodoro_limit"
            )
 
-Now we can add a method that updates our configurable parameter ``pomodoro_limit``.
-The ``@on_conf_change`` decorator is the one in charge of capturing the signal that is generated when applying the change of a specific option.
+Then, we can add the ``set_pomodoro_limit`` method that updates our configurable parameter ``pomodoro_limit``.
+The ``@on_conf_change`` decorator is responsible for capturing the signal generated when applying the change of a specific option.
 
 .. code-block:: python
 
