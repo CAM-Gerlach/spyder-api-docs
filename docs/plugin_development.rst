@@ -1224,19 +1224,21 @@ Finally, when we click the Pomodoro timer buttons on the toolbar, we should see 
 Adding a configuration page
 ===========================
 
-Another feature of Spyder plugins is that they can have configurable options that appear in Spyder's Preferences window.
+Another feature of Spyder plugins is that they can have configurable options that appear in the Spyder Preferences window.
+In this section, we will present how to use these options using our plugin as an example.
 
-Configuration defaults
-~~~~~~~~~~~~~~~~~~~~~~
+Defining the configuration defaults
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The final version in which we add a configurable parameter will be called ``CONFPAGE``.
-
-The first step is to define what options we want to offer to our users. For this we must create a new file, which we can call ``conf.py``.
-In this file we will write the following:
 
 `ACTIONS -> CONFPAGE config.py diff`_
 
 .. _ACTIONS -> CONFPAGE config.py diff: https://github.com/map0logo/spyder-pomodoro-timer/commit/b71457c96013dc0b9c27d588f46568a81e9a2f0c
+
+The first step is to define what options we want to offer to our users.
+To do this, we must create a new file called ``conf.py``.
+In this file we will write the following code:
 
 .. code-block:: python
 
@@ -1259,10 +1261,11 @@ In this file we will write the following:
        ("shortcuts", {"pomodoro-timer start/pause": "Ctrl+Alt+Shift+P"}),
    ]
 
-We must highlight the declaration of ``CONF_SECTION``, which is the internal name of the section in Preferences corresponding to our plugin; and the dictionary keys associated with ``CONF_DEFAULTS``.
-In this case, we are indicating that ``pomodoro_limit`` is a configurable parameter within the ``spyder_pomodoro_timer`` section.
+``CONF_SECTION`` is the internal name of the section in Preferences corresponding to our plugin and the dictionary keys associated with ``CONF_DEFAULTS``.
+In the code, we are indicating that ``pomodoro_limit`` is a configurable parameter within the ``spyder_pomodoro_timer`` section.
 
-At the end of this file it is necessary to set another important constant, ``CONF_VERSION``, which must be updated when adding, removing or renaming configurable parameters in successive versions of the plugin.
+At the end of this file, as shown below, it is necessary to set the constant: ``CONF_VERSION``.
+This constant must be updated when adding, deleting, or renaming configurable parameters in successive versions of the plugin.
 
 .. code-block:: python
 
@@ -1275,7 +1278,8 @@ At the end of this file it is necessary to set another important constant, ``CON
    # 3. You don't need to touch this value if you're just adding a new option
    CONF_VERSION = "1.0.0"
 
-Note that we are moving the definition of ``POMODORO_DEFAULT`` from ``widgets.py`` to ``conf.py``, since we now have a dedicated place for default configuration values.
+.. note::
+   We are moving the definition of ``POMODORO_DEFAULT`` from the ``widgets.py`` file to the ``conf.py`` file, as we now have a dedicated place for the default configuration values.
 
 Configuration page
 ~~~~~~~~~~~~~~~~~~
