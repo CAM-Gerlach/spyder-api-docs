@@ -1224,7 +1224,7 @@ Finally, when we click the Pomodoro timer buttons on the toolbar, we should see 
 Adding a configuration page
 ===========================
 
-Another feature of Spyder plugins is that they can have configurable options that appear in the Spyder preferences window.
+Another feature of Spyder plugins is that they can have configurable options that appear in the Spyder Preferences window.
 In this section, we will present how to use these options using our plugin as an example.
 
 Defining the configuration defaults
@@ -1279,13 +1279,13 @@ This constant must be updated when adding, deleting, or renaming configurable pa
    CONF_VERSION = "1.0.0"
 
 .. note::
-   We are moving the definition of ``POMODORO_DEFAULT`` from the ``widgets.py`` file to the ``conf.py`` file, as we now have a dedicated place for the default configuration values.
+   We are moving the definition of ``POMODORO_DEFAULT`` from the ``widgets.py`` file to the ``conf.py`` file, as we now have a dedicated place for default configuration values.
 
 
 Building the configuration page
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Now, we need to build the page that will appear in the preferences window.
+Now, we need to build the page that will appear in the Preferences window.
 
 The final version in which we build the page will be called ``CONFPAGE`` and it is related to the ``confpage.py`` file.
 
@@ -1342,7 +1342,7 @@ In this case, our options section corresponds to a ``QGroupBox``, where the para
 Each parameter corresponds to a ``QGridLayout`` where labels and inputs (in this case a ``QSpinBox``) are distributed.
 
 .. hint::
-   Configuration pages in Spyder provide some helper methods to facilitate this work. For instance, ``create_spinbox`` allows to instantiate and initialize in one single step the widgets corresponding to the prefix an suffix labels together with the spinbox.
+   Configuration pages in Spyder provide some helper methods to facilitate this work. For instance, the ``create_spinbox`` method allows to instantiate and initialize in one single step the widgets corresponding to the prefix an suffix labels together with the spinbox.
 
 
 Propagating configuration changes
@@ -1375,8 +1375,8 @@ In the class ``PomodoroTimerStatus`` after the ID declaration, we will include t
    CONF_DEFAULTS = CONF_DEFAULTS
    CONF_VERSION = CONF_VERSION
 
-Now we can access the configuration options from anywhere in our plugin using the ``get_conf`` method.
-In this case we use this method to access ``pomodoro_limit`` value of the configuration instead of the ``POMODORO_DEFAULT`` constant.
+We can now access the configuration options from anywhere in our plugin using the ``get_conf`` method.
+In this case, we use this method to access the ``pomodoro_limit`` value of the configuration instead of the ``POMODORO_DEFAULT`` constant.
 
 .. code-block:: python
 
@@ -1415,7 +1415,7 @@ We will include the ``Plugin.Preferences`` in the list of ``REQUIRES``
        REQUIRES = [Plugins.Preferences, Plugins.StatusBar, Plugins.Toolbar]
 
 
-and register our plugin in a method with the decorator ``@on_plugin_available``.
+and register our plugin in the ``on_preferences_available`` method with the decorator ``@on_plugin_available``.
 
 .. code-block:: python
 
@@ -1424,8 +1424,8 @@ and register our plugin in a method with the decorator ``@on_plugin_available``.
            preferences = self.get_plugin(Plugins.Preferences)
            preferences.register_plugin_preferences(self)
 
-The preferences window can now be accessed from the toolbar or from the “Tools > Preferences” menu.
-There, we will find a section called *Spyder Pomodoro Timer* and inside it is the *Pomodoro timer limit* parameter.
+The Preferences window can now be accessed from the toolbar or from the “Tools > Preferences” menu.
+As shown in the following image, we will find a section called *Spyder Pomodoro Timer* and inside it is the *Pomodoro timer limit* parameter.
 If we change that value, we will see how the corresponding label in the status bar changes.
 
 .. image:: images/workshop-3/pd_plugin_confpage.gif
