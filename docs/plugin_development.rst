@@ -1576,11 +1576,15 @@ Once this is done, anyone can install our plugin in their environments simply by
 Final words
 ===========
 
-The possibility of making a tool extensible through plugins, extensions or addons, as they are usually called, is a fundamental feature that allows taking advantage of the talent of third-party developers to respond to needs and enhancements that are beyond the scope of the application's core development team.
+Extending a tool through plugins, extensions or addons is a fundamental feature because it allows taking advantage of the talent of third-party developers.
+In this way, it is possible to respond to needs and enhancements that may be beyond the scope of the application's core development team.
 
-Similarly, a plugin-based system makes the application much easier to maintain. Eventually, the ability to enable and disable plugins makes it more adaptable to different use cases. For instance, at present it would be inconceivable to think of a web browser that does not have extensions to block advertising or organize links, even if those features don't come by default on them.
+Similarly, a plugin-based system makes the application much easier to maintain.
+Eventually, the ability to enable and disable plugins makes it more adaptable to different use cases.
+For instance, at present it would be inconceivable to think of a web browser that does not have extensions to block advertising or organize links, even if those features don't come by default on them.
 
-In Spyder we have put special interest in consolidating an API that allows the development of plugins in a consistent way. The main focus of the development effort between versions 4 and 5 was in this direction and we are at a key moment where we expect to capitalize on all this work.
+In Spyder we have put special interest in consolidating an API that allows the development of plugins in a consistent way.
+The main focus of the development effort between versions 4 and 5 was in this direction and we are at a key moment where we expect to capitalize on all this work.
 
 In this tutorial you have learned how to:
 
@@ -1608,7 +1612,8 @@ If you have ideas for plugin development feel free to contact us through the `Sp
 Homework
 ~~~~~~~~
 
-As you may have noticed, there were some features left to implement such as notifications when pomodoros are completed. Try to implement them and do not hesitate to contact us if you have any doubts.
+As you may have noticed, there were some features left to implement such as notifications when pomodoros are completed.
+Try to implement them and do not hesitate to contact us if you have any doubts.
 
 
 ===============
@@ -1617,7 +1622,8 @@ Further reading
 
 In the `plugin-examples`_ repository you can find additional examples that will surely be useful for you to further understand Spyder plugin development.
 
-A more in-depth review of the Spyder repository itself, especially its simpler plugins, such as History, Plots or Working directory, may help you understand it better. As well as a review of the various helper functions, widgets and mixins present in ``spyder.api``.
+A more in-depth review of the Spyder repository itself, especially its simpler plugins, such as History, Plots or Working directory, may help you understand it better.
+As well as a review of the various helper functions, widgets and mixins present in ``spyder.api``.
 
 
 .. _plugin-examples: https://github.com/spyder-ide/plugin-examples
