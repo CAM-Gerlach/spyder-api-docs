@@ -1437,37 +1437,45 @@ Now your plugin is in an initial version ready to be published...
 Publishing your plugin
 ======================
 
-Since the recommended way to install Spyder is through conda, the obvious choice would be to publish our plugin through a channel like conda-forge, but this is a task that is beyond the scope of this tutorial due to its complexity.
+Since the recommended way to install Spyder is through Conda, the clear choice would be to publish our plugin through a channel like conda-forge. However, this is a task that is beyond the scope of this tutorial due to its complexity.
 
-However, the tools used to publish packages in conda are usually based on the packages published in PyPI. So let's see how to publish our plugin there.
+The tools used to publish packages in Conda are usually based on the packages published in PyPI.
+Then, we can see how to publish our plugin in PyPI.
 
 .. image:: images/workshop-3/pd_plugin_publish.png
-   :alt: Publish your plugin in PyPI.
+   :alt: Publishing your plugin in PyPI.
 
 
-PyPI and TestPyPI
-~~~~~~~~~~~~~~~~~
+Creating the account on PyPI and TestPyPI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The first thing we have to do is to create an account on the `PyPI`_ and `TestPyPI`_ websites. Although our package will be finally published in PyPI, it is advisable to use TestPyPI to test that our package can be published properly without generating additional load to the PyPI servers or affecting their logs.
+The first thing we have to do is to create an account on the `PyPI`_ and `TestPyPI`_ websites.
+Although our package will eventually be published in PyPI, it is advisable to use TestPyPI to test that our package can be published correctly without generating additional load to the PyPI servers or affecting its logs.
 
-Next, we need edit the ``setup.py`` file at the root of our project with our own data. Fortunately, cookiecutter created one for us.
+Next, we will find the ``setup.py`` file in the root of our project.
+This file has already been created by cookiecutter.
+Next, we will edit the file with our own data.
 
-To upload our package to PyPI we have to use a tool called `Twine`_ that makes this task much easier. And we can install it in our conda environment using:
+Finally, we will upload our package to PyPI.
+To do this, we have to use a tool called `Twine`_ that makes this task much easier.
+We can install this tool in our Conda environment using:
 
 .. code-block:: shell
 
    $ mamba install twine
 
-Build and check the package
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before publishing our plugin we must package it. To do it we must write the following from the root folder of our project (where ``setup.py`` is placed):
+Building and checking the package
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before publishing our plugin we must package it.
+To do this, we must execute the following code from the root folder of our project (where ``setup.py`` is located):
 
 .. code-block:: bash
 
    $ python setup.py sdist bdist_wheel
 
-After that we will see that the following files are generated in the ``dist`` folder:
+Then, we will see that the following files are generated in the ``dist`` folder:
 
 .. code-block:: bash
 
@@ -1476,13 +1484,13 @@ After that we will see that the following files are generated in the ``dist`` fo
        ├── spyder_pomodoro_timer-0.0.1.dev0-py3-none-any.whl
        └── spyder-pomodoro-timer-0.0.1.dev0.tar.gz
 
-On Linux and macOS we can check that the newly built distribution packages contain the expected files by inspecting the contents of the ``tar`` file:
+We can check on Linux and macOS that newly created distribution packages contain the expected files by inspecting the contents of the ``tar`` file:
 
 .. code-block:: bash
 
    $ tar tzf dist/spyder-pomodoro-timer-0.0.1.dev0.tar.gz
 
-You can also use ``twine`` to run a check on the created files in ``dist``:
+You can also use ``twine`` to run a check of the files created in the ``dist`` folder:
 
 .. code-block:: bash
 
@@ -1490,22 +1498,26 @@ You can also use ``twine`` to run a check on the created files in ``dist``:
    Checking dist/spyder_pomodoro_timer-0.0.1.dev0-py3-none-any.whl: PASSED
    Checking dist/spyder-pomodoro-timer-0.0.1.dev0.tar.gz: PASSED
 
-Upload to PyPI
-~~~~~~~~~~~~~~
 
-Now we can use twine to upload the distribution packages we have built. First, we will upload them to TestPyPI to make sure everything works:
+Uploading the package to PyPI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now we can use ``twine`` to upload the distribution packages we have built.
+First, we will upload them to TestPyPI to make sure everything works:
 
 .. code-block:: bash
 
    $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
-This command will prompt you for the username and password with which you registered in TestPyPI.
+This command will prompt you for the user name and password with which you registered in TestPyPI.
 
-If we open https://test.pypi.org/project/spyder-pomodoro-timer/ in the browser we will be able to see the package we have just published.
+To view the package just published, open https://test.pypi.org/project/spyder-pomodoro-timer/ in your browser.
 
-There we'll see that some details are missing, like the package description, and that our package is marked as ``Development Status 5-Stable``.
+There we will see that some details are missing, such as the package description.
+Also, we will notice that our package is marked as ``Development Status 5-Stable``.
 
-To fix the first one, we can follow the instructions in `Making a PyPI-friendly README`_. Since we already have a README file, we simply add the following lines to the beginning of our ``setup.py`` file:
+To fix the package description, we can follow the instructions in `Making a PyPI-friendly README`_.
+Since we already have a ``README`` file, we simply add the following lines to the beginning of the ``setup.py`` file:
 
 .. code-block:: python
 
@@ -1521,16 +1533,17 @@ To fix the first one, we can follow the instructions in `Making a PyPI-friendly 
        long_description_content_type='text/markdown'
    )
 
-We can also change the classifiers of our package using the following site as a guide: https://pypi.org/classifiers. Here we can simply copy the classifiers we consider appropriate and then paste them into our code.
-Specifically in ``setup.py``, within the list that enters as the ``classifier`` argument in the call to function ``setup``.
+We can also change the classifiers of our package using the following site as a guide: https://pypi.org/classifiers.
+We can simply copy the classifiers we consider appropriate and paste them into our code.
+Specifically in the ``setup.py`` file, inside the list that enters as the ``classifier`` argument in the call to the ``setup`` function.
 
-With these changes, and by bumping our plugin's version in the ``__init__.py`` file inside the ``spyder_pomodoro_timer`` folder, we can repeat the cycle of building a new version of our package, loading it into TestPyPI for checking, and finally loading it into PyPI by using:
+With these changes and by bumping the version of our plugin in the ``__init__.py`` file inside the ``spyder_pomodoro_timer`` folder, we can repeat the cycle of building a new version of our package, loading it into TestPyPI for testing, and finally uploading it into PyPI by using:
 
 .. code-block:: bash
 
    $ twine upload dist/
 
-And check the result in https://pypi.org/project/spyder-pomodoro-timer/
+And check the result in https://pypi.org/project/spyder-pomodoro-timer/.
 
 Once this is done, anyone can install our plugin in their environments simply by running:
 
