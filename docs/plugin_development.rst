@@ -1576,44 +1576,45 @@ Once this is done, anyone can install our plugin in their environments simply by
 Final words
 ===========
 
-Extending a tool through plugins, extensions or addons is a fundamental feature because it allows taking advantage of the talent of third-party developers.
-In this way, it is possible to respond to needs and enhancements that may be beyond the scope of the application's core development team.
+Through this tutorial, we have navagated the features offered by Spyder to develop plugins.
+Extending a tool through plugins, extensions or addons brings fundamental benefits such as:
 
-Similarly, a plugin-based system makes the application much easier to maintain.
-Eventually, the ability to enable and disable plugins makes it more adaptable to different use cases.
-For instance, at present it would be inconceivable to think of a web browser that does not have extensions to block advertising or organize links, even if those features don't come by default on them.
+*  It allows taking advantage of the talent of third-party developers. In this way, it is possible to respond to needs and enhancements that may be beyond the scope of the application's core development team.
 
-In Spyder we have put special interest in consolidating an API that allows the development of plugins in a consistent way.
+* A plugin-based system makes the application much easier to maintain.
+
+* Eventually, the ability to enable and disable plugins makes it more adaptable to different use cases. For instance, it would be inconceivable today to think of a web browser that does not have extensions to block advertising or organize links, although these functions are not included by default.
+
+In Spyder we have put special interest in consolidating an API that allows the consistent plugin development.
 The main focus of the development effort between versions 4 and 5 was in this direction and we are at a key moment where we expect to capitalize on all this work.
 
 In this tutorial you have learned how to:
 
-- Identify the basic building blocks in Spyder development.
+- Identify the basic building blocks of Spyder development.
 - Identify the different types of plugins that can be implemented in Spyder.
-- Recognize the types of plugins that are part of Spyder.
 - Plan the development of a new Spyder plugin.
-- Build a development environment for Spyder plugin development.
+- Establish a development environment for Spyder plugin development.
+- Create a orepository in GitHub to manage version control of a Spyder plugin.
 - Generate the basic structure of a Spyder plugin using Cookiecutter.
 - Understand the file structure of a Spyder plugin.
-- Add and register Qt widgets in the Spyder status bar.
-- Add and register Qt widgets in the Spyder toolbar.
-- Add a menu with actions in the toolbar.
-- Add configuration options to our plugin and display them appear in the Preferences window.
-- Edit the description and classifiers of the installable package of our plugin.
-- Publish our plugin to TestPyPI and PyPI.
+- Build and test a Spyder plugin.
+- Add and register Qt widgets to both the Spyder status bar and toolbar.
+- Include a menu with actions in the toolbar.
+- Add configuration options to a Spyder plugin and make them appear in the Preferences window.
+- Edit the description and classifiers of the installable package of a Spyder plugin.
+- Publish a Spyder plugin in TestPyPI and PyPI.
 
-With these skills we hope to ease the way for you to develop your own Spyder plugins.
+With these knowledge, we hope to ease the way for you to develop your own Spyder plugins.
 
-If you have ideas for plugin development feel free to contact us through the `Spyder-IDE`_ Github organization space.
+If you have ideas for plugin development, feel free to contact us through the `Spyder-IDE`_ Github organization space.
 
 .. _Spyder-IDE: https://github.com/spyder-ide
 
 
-Homework
-~~~~~~~~
-
-As you may have noticed, there were some features left to implement such as notifications when pomodoros are completed.
-Try to implement them and do not hesitate to contact us if you have any doubts.
+.. note::
+   As you may have noticed, there were some features left to implement such as notifications when pomodoros are completed.
+   Try to implement them by putting your knowledge in practice!
+   Please, do not hesitate to contact us if you have any questions.
 
 
 ===============
