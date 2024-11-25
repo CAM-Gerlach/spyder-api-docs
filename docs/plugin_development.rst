@@ -1576,7 +1576,7 @@ Once this is done, anyone can install our plugin in their environments simply by
 Final words
 ===========
 
-Through this tutorial, we have navagated the features offered by Spyder to develop plugins.
+Through this tutorial, we have navigated the features offered by Spyder to develop plugins.
 Extending a tool through plugins, extensions or addons brings fundamental benefits such as:
 
 *  It allows taking advantage of the talent of third-party developers. In this way, it is possible to respond to needs and enhancements that may be beyond the scope of the application's core development team.
@@ -1621,10 +1621,11 @@ If you have ideas for plugin development, feel free to contact us through the `S
 Further reading
 ===============
 
-In the `plugin-examples`_ repository you can find additional examples that will surely be useful for you to further understand Spyder plugin development.
+If you would like to dive deeper into the Spyder's information, we invite you to consult the following content:
 
-A more in-depth review of the Spyder repository itself, especially its simpler plugins, such as History, Plots or Working directory, may help you understand it better.
-As well as a review of the various helper functions, widgets and mixins present in ``spyder.api``.
+* You can find additional examples in the `plugin-examples`_ repository that will surely be useful to better understand Spyder plugin development.
+* A closer look at the Spyder repository itself, especially its simpler plugins (such as History, Plots or Working directory) can help you understand Spyder better.
+* As well as a review of the various helper functions, widgets and mixins present in ``spyder.api``.
 
 
 .. _plugin-examples: https://github.com/spyder-ide/plugin-examples
