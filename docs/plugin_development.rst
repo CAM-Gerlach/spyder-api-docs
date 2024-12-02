@@ -4,7 +4,7 @@
 Tutorial to develop a Spyder plugin
 ###################################
 
-This tutorial walks you through creating a Spyder plugin to add a configurable `Pomodoro Technique_` timer to the status bar and toolbar buttons to interact with it.
+This tutorial walks you through creating a Spyder plugin to add a configurable `Pomodoro Technique`_ timer to the status bar and toolbar buttons to interact with it.
 Along the way, we'll learn how to use Spyder's API to develop plugins and extend their functionality.
 
 To do so, we'll:
@@ -463,11 +463,11 @@ In the ``spyder`` directory you'll find the following files:
 
   * If it is a ``SpyderPluginV2`` you should set a constant class named ``CONTAINER_CLASS`` with an instance of ``PluginMainContainer``.
   * If it is a ``SpyderDockablePlugin`` you should set a constant class named ``WIDGET_CLASS`` with an instance of ``PluginMainWidget``.
-  
-  For example:
-  
+
+  For example, with a ``SpyderPluginV2``:
+
   .. code-block:: python
-     
+
      # plugin.py
      from spyder.api.plugins import SpyderPluginV2
      from my_plugin.spyder.container import MyContainer
