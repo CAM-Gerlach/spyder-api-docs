@@ -490,17 +490,18 @@ In the ``spyder`` directory you'll find the following files:
 
 
 
-=========================
-Building our first plugin
-=========================
+===================
+Building our plugin
+===================
 
 From now on we will build our plugin step by step.
 In the `spyder pomodoro timer repository`_ you will find the final version of the code for you to take a look, in case we are missing any detail.
 
 .. _spyder pomodoro timer repository: https://github.com/map0logo/spyder-pomodoro-timer
 
-Widgets
-~~~~~~~
+
+The widgets
+~~~~~~~~~~~
 
 The best way to start building our plugin is to implement its graphical components in the ``widgets.py`` file.
 Let us call the initial unedited version ``INITIAL``.
@@ -512,13 +513,10 @@ In `INITIAL`_, the ``widgets.py`` file is as follows:
    # Spyder imports
    from spyder.api.config.decorators import on_conf_change
    from spyder.api.translations import get_translation
-
    from spyder.api.widgets.mixins import SpyderWidgetMixin
-
 
    # Localization
    _ = get_translation("spyder_pomodoro_timer.spyder")
-
 
 .. hint::
 
@@ -539,11 +537,12 @@ The first version we are going to have after the first editions will be called `
 
 Taking a look at the Spyder ``API`` module, we can find the following two types of predefined components for the status bar in Spyder:
 
-* ``StatusBarWidget``. A class derived from ``QWidget`` and ``SpyderWidgetMixin``, which contains an icon, a label, and a spinner (to show the plugin loading).
-* ``BaseTimerStatus``. A class derived from ``StatusBarWidget`` with an internal ``QTimer`` to periodically update its content.
+* ``StatusBarWidget``.
+  A class derived from ``QWidget`` and ``SpyderWidgetMixin``, which contains an icon, a label, and a spinner (to show the plugin loading).
+* ``BaseTimerStatus``.
+  A class derived from ``StatusBarWidget`` with an internal ``QTimer`` to periodically update its content.
 
 Since we want a widget that shows the Pomodoro countdown and is updated periodically, we will use an instance of ``BaseTimerStatus``.
-
 So, we can substitute
 
 .. code-block:: python
@@ -611,8 +610,8 @@ To finish the implementation of our widget, ``BaseTimerStatus`` requires the fol
    # ---- BaseTimerStatus API
    def get_value(self):
        """Get current time of the timer"""
-
        return self.value
+
 
 The container
 ~~~~~~~~~~~~~
@@ -630,7 +629,6 @@ Thus, the `Cookiecutter`_ version of the ``container.py`` file is:
    from spyder.api.widgets.main_container import PluginMainContainer
 
    _ = get_translation("spyder_pomodoro_timer.spyder")
-
 
    class SpyderPomodoroTimerContainer(PluginMainContainer):
 
@@ -666,8 +664,9 @@ Then, we edit the ``setup`` method to add an instance of our widget.
            # Widgets
            self.pomodoro_timer_status = PomodoroTimerStatus(self)
 
-Plugin
-~~~~~~
+
+The plugin
+~~~~~~~~~~
 
 Finally, we define our plugin to be registered within Spyder.
 The `INITIAL`_ version (i.e. the one created by cookiecutter) for the ``plugin.py`` file is:
@@ -694,9 +693,7 @@ The `INITIAL`_ version (i.e. the one created by cookiecutter) for the ``plugin.p
 .. code-block:: python
 
     class SpyderPomodoroTimer(SpyderPluginV2):
-        """
-        Spyder Pomodoro Timer plugin.
-        """
+        """Spyder Pomodoro Timer plugin."""
 
         NAME = "spyder_pomodoro_timer"
         REQUIRES = []
@@ -748,8 +745,6 @@ For that, we substitute
 
    from qtpy.QtGui import QIcon
 
-   # ...
-
 and
 
 .. code-block:: python
@@ -773,7 +768,6 @@ and
 
        def get_icon(self):
            return qta.icon("mdi.av-timer", color=ima.MAIN_FG_COLOR)
-
 
 Due to recent changes to the Spyder API, we need to add to the spyder imports
 
@@ -814,6 +808,7 @@ We created a widget and added it to the container, which is registered in the pl
 In the plugin, we accessed the instance of that widget and added it to the status bar.
 
 .. _INITIAL: https://github.com/map0logo/spyder-pomodoro-timer/tree/v0.1.1-dev0
+
 
 
 ==================
