@@ -1220,6 +1220,7 @@ Finally, when we click the Pomodoro timer buttons on the toolbar, we should see 
    :alt: Timer buttons in Spyder's toolbar being clicked and showing how they start, pause and stop the pomodoro timer in the status bar
 
 
+
 ===========================
 Adding a configuration page
 ===========================
@@ -1227,8 +1228,9 @@ Adding a configuration page
 Another feature of Spyder plugins is that they can have configurable options that appear in the Spyder Preferences window.
 In this section, we will present how to use these options using our plugin as an example.
 
-Defining the configuration defaults
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Defining the defaults
+~~~~~~~~~~~~~~~~~~~~~
 
 The final version in which we add a configurable parameter will be called ``CONFPAGE`` and it is related to the ``config.py`` file.
 
@@ -1245,12 +1247,10 @@ In this file we will write the following code:
    """Spyder terminal default configuration."""
 
    # --- Constants
+
    # ------ Time limits by default
-
    POMODORO_DEFAULT = 25 * 60 * 1000  # 25 mins in milliseconds
-
    CONF_SECTION = "spyder_pomodoro_timer"
-
    CONF_DEFAULTS = [
        (
            CONF_SECTION,
@@ -1282,8 +1282,8 @@ This constant must be updated when adding, deleting, or renaming configurable pa
    We are moving the definition of ``POMODORO_DEFAULT`` from the ``widgets.py`` file to the ``conf.py`` file, as we now have a dedicated place for default configuration values.
 
 
-Building the configuration page
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Building the preferences page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now, we need to build the page that will appear in the Preferences window.
 
@@ -1297,9 +1297,8 @@ To implement the required code, we will edit the ``confpage.py`` file generated 
 
 .. code-block:: python
 
-   """
-   Spyder Pomodoro Timer Preferences Page.
-   """
+   """Spyder Pomodoro Timer Preferences Page."""
+
    from qtpy.QtWidgets import QGridLayout, QGroupBox, QVBoxLayout
    from spyder.api.preferences import PluginConfigPage
    from spyder.api.translations import get_translation
@@ -1308,11 +1307,9 @@ To implement the required code, we will edit the ``confpage.py`` file generated 
 
    _ = get_translation("spyder_pomodoro_timer.spyder")
 
-
    class SpyderPomodoroTimerConfigPage(PluginConfigPage):
 
        # --- PluginConfigPage API
-       # ------------------------------------------------------------------------
        def setup_page(self):
            limits_group = QGroupBox(_("Time limits"))
            pomodoro_spin = self.create_spinbox(
@@ -1342,11 +1339,13 @@ In this case, our options section corresponds to a ``QGroupBox``, where the para
 Each parameter corresponds to a ``QGridLayout`` where labels and inputs (in this case a ``QSpinBox``) are distributed.
 
 .. hint::
-   Configuration pages in Spyder provide some helper methods to facilitate this work. For instance, the ``create_spinbox`` method allows to instantiate and initialize in one single step the widgets corresponding to the prefix an suffix labels together with the spinbox.
+
+   Configuration pages in Spyder provide some helper methods to facilitate this work.
+   For instance, the ``create_spinbox`` method allows to instantiate and initialize in one single step the widgets corresponding to the prefix an suffix labels together with the spinbox.
 
 
-Propagating configuration changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Propagating config changes
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Since we moved all the configuration information to the ``conf.py`` file, now we have to import it into the ``widgets.py`` file.
 
@@ -1395,6 +1394,7 @@ The ``@on_conf_change`` decorator is responsible for capturing the signal genera
            self.countdown = self.pomodoro_limit
            self.value = self.display_time()
 
+
 Registering preferences
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1433,11 +1433,14 @@ If we change that value, we will see how the corresponding label in the status b
 
 Now your plugin is in an initial version ready to be published...
 
-======================
-Publishing your plugin
-======================
 
-Since the recommended way to install Spyder is through Conda, the clear choice would be to publish our plugin through a channel like conda-forge. However, this is a task that is beyond the scope of this tutorial due to its complexity.
+
+=====================
+Publishing our plugin
+=====================
+
+Since the recommended way to install Spyder is through Conda, the clear choice would be to publish our plugin through a channel like conda-forge.
+However, this is a task that is beyond the scope of this tutorial due to its complexity.
 
 The tools used to publish packages in Conda are usually based on the packages published in PyPI.
 Then, we can see how to publish our plugin in PyPI.
@@ -1446,8 +1449,8 @@ Then, we can see how to publish our plugin in PyPI.
    :alt: Publishing your plugin in PyPI.
 
 
-Creating the account on PyPI and TestPyPI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Creating PyPI accounts
+~~~~~~~~~~~~~~~~~~~~~~
 
 The first thing we have to do is to create an account on the `PyPI`_ and `TestPyPI`_ websites.
 Although our package will eventually be published in PyPI, it is advisable to use TestPyPI to test that our package can be published correctly without generating additional load to the PyPI servers or affecting its logs.
@@ -1499,7 +1502,7 @@ You can also use ``twine`` to run a check of the files created in the ``dist`` f
    Checking dist/spyder-pomodoro-timer-0.0.1.dev0.tar.gz: PASSED
 
 
-Uploading the package to PyPI
+Testing and uploading to PyPI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now we can use ``twine`` to upload the distribution packages we have built.
@@ -1512,7 +1515,6 @@ First, we will upload them to TestPyPI to make sure everything works:
 This command will prompt you for the user name and password with which you registered in TestPyPI.
 
 To view the package just published, open https://test.pypi.org/project/spyder-pomodoro-timer/ in your browser.
-
 There we will see that some details are missing, such as the package description.
 Also, we will notice that our package is marked as ``Development Status 5-Stable``.
 
