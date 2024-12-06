@@ -848,6 +848,8 @@ And as :ref:`Figure 4 <tutorial-figure-4>` presents, you should see our plugin i
 
 
 
+.. _tutorial-update-timer:
+
 ==============================
 Making the Pomodoro timer work
 ==============================
@@ -858,7 +860,7 @@ In this section, we will use ``QTimer`` in the ``PomodoroTimerStatus`` class (in
 
 .. hint::
 
-   If you're new to Qt, see our :ref:`qt-fundamentals` page for an overview of the basics, and the  `Qt documentation`_ for the full reference.
+   If you're new to `Qt`_, see our :ref:`qt-fundamentals` page for an overview of the basics, and the  `Qt documentation`_ for the full reference.
 
 .. _Qt documentation: https://doc.qt.io/
 
@@ -929,23 +931,25 @@ For reference, the changes in this revision ("``TIMER``") are shown in the `HELL
 
 
 
+.. _tutorial-toolbar:
+
 ====================================
 Adding timer controls to the toolbar
 ====================================
 
-Now that our plugin updates the timer in Spyder's toolbar, we'll add some controls for it, by:
+Now that our plugin :ref:`updates the timer <tutorial-update-timer>` in Spyder's toolbar, we'll add some controls for it, by:
 
-#. :ref:`creating-instance`,
-#. :ref:`adding-actions`,
-#. :ref:`implementing_behavior`,
-#. :ref:`registering_toolbar`, and
-#. :ref:`reviewing_changes`.
+#. :ref:`tutorial-toolbar-subclass`,
+#. :ref:`tutorial-toolbar-actions`,
+#. :ref:`tutorial-toolbar-behavior`,
+#. :ref:`tutorial-toolbar-registration`, and
+#. :ref:`tutorial-toolbar-reviewing`.
 
 Implementing these changes will help us learn how to work with toolbars, menus, and actions in Spyder.
 For future reference, we'll call this revision ``TOOLBAR``.
 
 
-.. _creating-instance:
+.. _tutorial-toolbar-subclass:
 
 Creating a toolbar subclass
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -993,7 +997,7 @@ with
 Here's a full listing of the `TIMER -> TOOLBAR widgets.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/48a946fdbb934b9b85facd3c1b77fc8999e049a9>`__.
 
 
-.. _adding-actions:
+.. _tutorial-toolbar-actions:
 
 Creating the high-level toolbar structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1030,7 +1034,7 @@ Here, we create three classes:
 To review, you can check out the `TIMER -> TOOLBAR api.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/cf540f972f37aaf5d6ccc8524cbcc7aeae9c483b>`__.
 
 
-.. _implementing_behavior:
+.. _tutorial-toolbar-behavior:
 
 Implementing the toolbar behaviors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1039,7 +1043,7 @@ Now let's implement the behavior of our new Pomodoro timer toolbar and its actio
 Because this involves the relationship between our plugin widgets and other areas of Spyder, we'll do this in the ``container.py`` file.
 These changes won't specify the internal behavior of our plugin; that's already handled by our widgets in ``widget.py``.
 
-As we did with the ``PomodoroTimerStatus`` class, we will use `QtAwesome`_ icons for our actions.
+:ref:`As we did <tutorial-building-widgets-py>` with the ``PomodoroTimerStatus`` class, we will use `QtAwesome`_ icons for our actions.
 We also use the ``QToolButton`` class to for the buttons added to our toolbar.
 We'll first need to add these as third party imports (above the Spyder section):
 
@@ -1171,7 +1175,7 @@ and restart the countdown in the case of ``stop_pomodoro_timer()``.
 Summing up, here's the `TIMER -> TOOLBAR container.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/492f30771285af937a8a75d69e4e879d21f9dc0f>`__.
 
 
-.. _registering_toolbar:
+.. _tutorial-toolbar-registration:
 
 Registering the toolbar
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -1197,7 +1201,7 @@ And use this plugin's API to add the individual toolbar we created in the ``cont
 Here's the final `TIMER -> ACTIONS plugin.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/012c5ef6568114ea945501d44efb30afeefbad98>`__.
 
 
-.. _reviewing_changes:
+.. _tutorial-toolbar-reviewing:
 
 Reviewing our changes
 ~~~~~~~~~~~~~~~~~~~~~
