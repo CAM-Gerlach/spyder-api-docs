@@ -1572,6 +1572,8 @@ Once this is done, anyone can install our plugin in their environments simply by
 
 
 
+.. _tutorial-conclusion:
+
 ===========
 Final words
 ===========
@@ -1608,6 +1610,8 @@ If you have any ideas for plugin development, you're welcome to contact us throu
 .. _Spyder-IDE: https://github.com/spyder-ide
 
 
+
+.. _tutorial-further-reading:
 
 ===============
 Further reading
