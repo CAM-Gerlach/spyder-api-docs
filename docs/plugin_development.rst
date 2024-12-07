@@ -1221,6 +1221,8 @@ Finally, when we click the Pomodoro timer buttons on the toolbar, we should see 
 
 
 
+.. _tutorial-config:
+
 ===========================
 Adding a configuration page
 ===========================
@@ -1230,6 +1232,8 @@ In this section, we'll walk through implementing a preferences page for our exam
 
 We'll call this final version of our plugin ``CONFPAGE``, for reference in the diffs below.
 
+
+_tutorial-config-defaults:
 
 Defining the defaults
 ~~~~~~~~~~~~~~~~~~~~~
@@ -1278,6 +1282,8 @@ It must be incremented when adding, deleting, or renaming configurable parameter
 
 For reference, here's the `ACTIONS -> CONFPAGE config.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/b71457c96013dc0b9c27d588f46568a81e9a2f0c>`__.
 
+
+.. _tutorial-config-page:
 
 Building the preferences page
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1337,6 +1343,8 @@ Each parameter corresponds to a ``QGridLayout`` where labels and inputs (in this
 You can see the all the changes we've made here in the `ACTIONS -> CONFPAGE confpage.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/bd3bcf2ce895c440fb2d6b80233100c6d86822fe>`__.
 
 
+.. _tutorial-config-changes:
+
 Propagating config changes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1383,6 +1391,8 @@ Then, we can add the ``set_pomodoro_limit()`` method that updates our configurab
 To view all these changes together, see the `ACTIONS -> CONFPAGE widgets.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/b94cee118bf887b52934230a35d67a0080551a68>`__.
 
 
+.. _tutorial-config-registering:
+
 Registering preferences
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1416,6 +1426,8 @@ For a review of our changes here, see the `ACTIONS -> CONFPAGE plugin.py diff <h
 
 
 
+.. _tutorial-publishing:
+
 =====================
 Publishing our plugin
 =====================
@@ -1437,6 +1449,8 @@ It's time to publish our plugin as a PyPI package!
 .. _Contributing packages: https://conda-forge.org/docs/maintainer/adding_pkgs/
 
 
+.. _tutorial-publishing-account:
+
 Creating a PyPI account
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1456,6 +1470,8 @@ We can install them in our Conda environment using:
 
    The Python ``build`` package is named ``build`` on PyPI (``pip install build``) and ``python-build`` on Conda-Forge (``conda install python-build``); the Conda-Forge package named ``build`` should *not* be used as it is obsolete.
 
+
+.. _tutorial-publishing-building:
 
 Building and checking the package
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1490,6 +1506,8 @@ You can also use Twine to run a check of the distribution packages created in th
    Checking dist/spyder_pomodoro_timer-0.0.1.dev0-py3-none-any.whl: PASSED
    Checking dist/spyder-pomodoro-timer-0.0.1.dev0.tar.gz: PASSED
 
+
+.. _tutorial-publishing-uploading:
 
 Testing and uploading to PyPI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
