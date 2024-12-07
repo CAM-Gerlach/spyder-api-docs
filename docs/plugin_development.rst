@@ -1576,42 +1576,34 @@ Once this is done, anyone can install our plugin in their environments simply by
 Final words
 ===========
 
-Through this tutorial, we have navigated the features offered by Spyder to develop plugins.
-Extending a tool through plugins, extensions or addons brings fundamental benefits such as:
+Through this tutorial, we have navigated many of the features that Spyder offers for developing plugins.
+In Spyder, we have put a lot of effort toward creating and maintaining an API that allows for powerful, flexible and easy plugin development.
+The main focus of the development effort between versions 4 and 5 was in this direction, while Spyder 6 further expanded upon this work, so we're looking forward to seeing what you can do with it!
 
-* It allows taking advantage of the talent of third-party developers.
-  In this way, it is possible to respond to needs and enhancements that may be beyond the scope of the application's core development team.
-* A plugin-based system makes the application much easier to maintain.
-* Eventually, the ability to enable and disable plugins makes it more adaptable to different use cases.
-  For instance, it would be inconceivable today to think of a web browser that does not have extensions to block advertising or organize links, although these functions are not included by default.
+In this tutorial, we've learned how to:
 
-In Spyder we have put special interest in consolidating an API that allows the consistent plugin development.
-The main focus of the development effort between versions 4 and 5 was in this direction and we are at a key moment where we expect to capitalize on all this work.
+* Understand the basic building blocks of Spyder development.
+* Choose the different types of plugins that can be implemented in Spyder.
+* Plan the development of a new Spyder plugin.
+* Set up a Spyder plugin development environment.
+* Initialize a Git repository on GitHub to manage our version control.
+* Generate the basic structure of a plugin using Cookiecutter.
+* Understand the basic file structure of a Spyder plugin.
+* Create, develop and test a plugin with Spyder.
+* Add and register Qt widgets in both the Spyder status bar and the toolbar.
+* Include a menu with multiple actions in the toolbar.
+* Add configuration options to a plugin and make them appear in the :guilabel:`Preferences` dialog.
+* Edit the packaging configuration of our plugin.
+* Publish our plugin on TestPyPI and PyPI.
 
-In this tutorial you have learned how to:
-
-- Identify the basic building blocks of Spyder development.
-- Identify the different types of plugins that can be implemented in Spyder.
-- Plan the development of a new Spyder plugin.
-- Establish a development environment for Spyder plugin development.
-- Create a orepository in GitHub to manage version control of a Spyder plugin.
-- Generate the basic structure of a Spyder plugin using Cookiecutter.
-- Understand the file structure of a Spyder plugin.
-- Build and test a Spyder plugin.
-- Add and register Qt widgets to both the Spyder status bar and toolbar.
-- Include a menu with actions in the toolbar.
-- Add configuration options to a Spyder plugin and make them appear in the Preferences window.
-- Edit the description and classifiers of the installable package of a Spyder plugin.
-- Publish a Spyder plugin in TestPyPI and PyPI.
-
-With these knowledge, we hope to ease the way for you to develop your own Spyder plugins.
-
-If you have ideas for plugin development, feel free to contact us through the `Spyder-IDE`_ Github organization space.
+We hope these skills have helped you learn how to develop your very own Spyder plugins!
 
 .. note::
    As you may have noticed, there were some features left to implement such as notifications when pomodoros are completed.
    Try to implement them by putting your knowledge in practice!
    Please, do not hesitate to contact us if you have any questions.
+
+If you have any ideas for plugin development, you're welcome to contact us through the `Spyder-IDE`_ GitHub organization.
 
 .. _Spyder-IDE: https://github.com/spyder-ide
 
@@ -1621,10 +1613,12 @@ If you have ideas for plugin development, feel free to contact us through the `S
 Further reading
 ===============
 
-If you would like to dive deeper into the Spyder's information, we invite you to consult the following content:
+If you would like to dive deeper into Spyder plugin development, we invite you to consult the following resources:
 
-* You can find additional examples in the `plugin-examples`_ repository that will surely be useful to better understand Spyder plugin development.
-* A closer look at the Spyder repository itself, especially its simpler plugins (such as History, Plots or Working directory) can help you understand Spyder better.
-* As well as a review of the various helper functions, widgets and mixins present in ``spyder.api``.
+* You can find additional examples in the `plugin-examples`_ repository that should be useful to better understand Spyder plugin development.
+* A closer look at the `Spyder repository`_ itself, especially its simpler plugins (such as History, Plots or Working directory) can help you understand Spyder better.
+* You can review the various helper functions, widgets and mixins present in `spyder.api`_.
 
 .. _plugin-examples: https://github.com/spyder-ide/plugin-examples
+.. _Spyder repository: https://github.com/spyder-ide/spyder
+.. _spyder.api: https://github.com/spyder-ide/spyder/tree/master/spyder/api
