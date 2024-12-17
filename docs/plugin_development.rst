@@ -1260,8 +1260,9 @@ In this file we'll add some key constants and default config values:
        ("shortcuts", {"pomodoro-timer start/pause": "Ctrl+Alt+Shift+P"}),
    ]
 
-``CONF_SECTION`` is the internal name of our plugin's section in :guilabel:`Preferences` as well as its key in the Spyder config dictionary, while ``CONF_DEFAULTS`` lists the settings and their defaualt values.
-In the code, we are indicating that ``pomodoro_limit`` is a configurable parameter within the ``spyder_pomodoro_timer`` section, and converting its value from milliseconds to the more user-friendly unit of minutes.
+``CONF_SECTION`` is the internal name of our plugin's section in :guilabel:`Preferences`, as well as the plugin's namespace in the config dictionary.
+``CONF_DEFAULTS`` lists the plugin's settings and their default values.
+In the code, we are indicating that ``pomodoro_limit`` is a configurable parameter within the ``spyder_pomodoro_timer`` section, and storing its default value in minutes for user display.
 
 At the end of this file, as shown below, we need to set the ``CONF_VERSION`` constant.
 It must be incremented when adding, deleting, or renaming configurable parameters in successive versions of the plugin.
@@ -1331,7 +1332,7 @@ To implement the required code, we will edit the generated ``confpage.py`` file 
            vlayout.addStretch(1)
            self.setLayout(vlayout)
 
-Most of this code follows typical pattern of building up a Qt widget-based user interface.
+Most of this code follows the typical pattern of building up a Qt widget-based user interface.
 In this case, our options section uses a ``QGroupBox``, where the parameters are organized vertically using a ``QVBoxLayout``.
 Each parameter corresponds to a ``QGridLayout`` where labels and inputs (in this case a ``QSpinBox``) are distributed.
 
@@ -1404,7 +1405,7 @@ Finally, we need to enable using our new preference page in ``plugin.py``, by in
        ...
        REQUIRES = [Plugins.Preferences, Plugins.StatusBar, Plugins.Toolbar]
 
-...and registering our plugin as an ``on_preferences_available`` callback using the ``@on_plugin_available`` decorator:
+...and registering our plugin's preferences in the ``on_preferences_available()`` method, which is decorated with ``@on_plugin_available`` so it is called once the ``Preferences`` plugin is loaded:
 
 .. code-block:: python
 
@@ -1413,7 +1414,7 @@ Finally, we need to enable using our new preference page in ``plugin.py``, by in
            preferences = self.get_plugin(Plugins.Preferences)
            preferences.register_plugin_preferences(self)
 
-The Spyder :guilabel:`Preferences` dialog can be accessed from the toolbar or from :menuselection:`Tools --> Preferences`.
+You can find the Spyder :guilabel:`Preferences` dialog in :menuselection:`Tools --> Preferences`, or :menuselection:`Python --> Preferences` on macOS.
 As shown in the following image, we should find a section called :guilabel:`Spyder Pomodoro Timer`, which contains our :guilabel:`Pomodoro timer limit` parameter.
 If we modify that value, we should see how the corresponding status bar timer updates appropriately.
 
@@ -1433,6 +1434,9 @@ Publishing our plugin
 =====================
 
 It's time to publish our plugin as a PyPI package!
+`PyPI`_, the Python Package Index, is the central repository where anyone can publish their own Python packages, that can be installed with Pip or other similar tools.
+
+.. _PyPI: https://pypi.org
 
 .. note::
 
@@ -1466,7 +1470,7 @@ We can install them in our Conda environment using:
 
    conda install -c conda-forge python-build twine
 
-.. note::
+.. caution::
 
    The Python ``build`` package is named ``build`` on PyPI (``pip install build``) and ``python-build`` on Conda-Forge (``conda install python-build``); the Conda-Forge package named ``build`` should *not* be used as it is obsolete.
 
@@ -1543,9 +1547,9 @@ Since we already have a ``README.md`` file, we simply add the following lines to
    )
 
 We can also add or change the classifiers of our package using the `PyPI classifiers page <https://pypi.org/classifiers>`_ as a guide.
-We can copy the classifiers we consider appropriate and paste them as a list into the ``classifiers`` argument.
+We can copy the classifiers we consider appropriate and paste them as a list into the ``classifiers`` argument of ``setup()``.
 
-After these changes and bumping the version of our plugin in the ``__init__.py`` inside the ``spyder_pomodoro_timer`` folder, we can repeat the cycle of building a new version of our package with ``build`` and uploading it to TestPy with ``twine``.
+After these changes and bumping the version of our plugin in the ``__init__.py`` inside the ``spyder_pomodoro_timer`` folder, we can repeat the cycle of building a new version of our package with ``build`` and uploading it to TestPyPI with ``twine``.
 After checking to make sure the result on TestPyPI looks as we expect, we can reset our package version to the initial ``0.1.0`` and finally upload it to PyPI with:
 
 .. code-block:: shell
