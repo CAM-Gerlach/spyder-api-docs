@@ -14,7 +14,7 @@ The following sections describe with more detail some QT components and their ma
 ## Basic Qt Components
 
 According to the official [Qt documentation](https://doc.qt.io/qtdesignstudio/quick-components.html): "a component is a reusable building block for a UI".
-Qt has some preset components that can include simple representations (shapes, text or images) or complex UI controls (such as sliders).
+Qt has some preset components that can include simple representations (shapes, text or images) or complex user interface (UI) controls (such as sliders).
 
 Each type of Qt component is a class starting with the letter ``Q`` followed by a name related to its functionality.
 
@@ -26,26 +26,31 @@ Some of these Qt components are explained below.
 
 ``MainWindow`` class provides a main application window and it has its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt-6/qtoolbar.html), menus [QMenuBar](https://doc.qt.io/qt-6/qmenubar.html), status bars [QStatusBar](https://doc.qt.io/qt-6/qstatusbar.html), and dockable widgets [QDockWidgets](https://doc.qt.io/qt-6/qdockwidget.html).
 
-These features serve as the basis for an application.
-
 For more details, you can refer to the official Qt documentation [MainWindow](https://doc.qt.io/qt-6/qmainwindow.html#details)
 
 ### Windows
 
-If an application requires additional windows that do not block the main window, these are generated as non-parent ``QWidget`` instances.
-These are used for tasks that happen in parallel over long-running processes such as displaying graphs or document editing.
+A window is a widget that is not embedded in a parent widget.
+When an application requires additional windows, which do not block the main window, they can be generated as non-parent ``QWidget`` instances.
+These are used for parallel tasks that take place in long-running processes, such as displaying graphs or editing documents.
 
 ### Widgets
 
-<span style="color: red">In computer science a *Widget* is a shortened form of “window gadget”.</span>
-A widget is an element of interaction, such as a button, or a container for other widgets, as panels or tabs.
+Widgets are the main elements for creating a UI in Qt.
+They can present data and updated information, receive user input (mouse, keyboard, and other events from the window system), and provide a container for grouping other widgets.
 
-"Widgets are the primary elements for creating user interfaces in Qt. Widgets can display data and status information, receive user input, and provide a container for other widgets that should be grouped together. A widget that is not embedded in a parent widget is called a window." (https://doc.qt.io/qt-6/qtwidgets-index.html)
+``QWidget`` is the fundamental class in Qt that provides the capability to handleuser input events and renders its representation on the screen.
 
-The ``QWidget`` class is the fundamental class for creating interfaces in Qt, it receives events from the window system, and renders its representation on the screen.
-A widget can provide a container for grouping other widgets, and if it is not embedded in a parent widget, it becomes a window.
+All UI elements provided by Qt are subclasses of QWidget or are used in connection with a QWidget subclass.
 
-"The QWidget class provides the basic capability to render to the screen and to handle user input events. All UI elements that Qt provides are either subclasses of QWidget or are used in connection with a QWidget subclass. To create custom widgets, subclass QWidget or a suitable subclass and reimplement the virtual event handlers."
+You can define your own custom widgets by creating a QWidget or a suitable subclass, and reimplement the virtual event handlers.
+
+There are top-level and child widgets.
+The first one is a widget without a parent and it is an independent window.
+The second one is a non-window widget, which is displayed within its parent widget.
+Most widgets in Qt are mainly useful as child widgets.
+
+For more details, you can refer to the official Qt documentation [QWidget](https://doc.qt.io/qt-6/qwidget.html).
 
 ### Layouts
 
