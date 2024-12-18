@@ -3,13 +3,13 @@
 
 # Qt Fundamentals
 
-[Qt](https://www.qt.io/) is an open source, multiplatform toolkit for creating graphical user interfaces.
+[Qt](https://www.qt.io/) is an open source, multiplatform toolkit for creating graphical user interfaces (GUI).
 Qt is also a complete development framework that offers utilities for building applications and libraries of extensions for networking, Bluetooth, charts, 3D rendering, navigation, among others.
-
-Spyder's plugin development consists of extending the functionality of its Qt-based graphical interface.
 
 To develop a GUI, we will add graphical elements of interaction known as widgets and arrange them using layouts.
 Then, we interconnect those widgets using customized procedures implemented as functions or methods, allowing to trigger behavior from user interaction.
+
+Spyder's plugin development consists of extending the functionality of its Qt-based graphical interface.
 The following sections describe with more detail some QT components and their main functions.
 
 ## Basic Qt Components
@@ -19,31 +19,8 @@ Qt has some preset components that can include simple representations (shapes, t
 
 Each type of Qt component is a class starting with the letter ``Q`` followed by a name related to its functionality.
 
-<span style="color: green"> Below, we list some of the Qt components that are related with the plugin development???
-
-### QApplication ###
-
-The core component of Qt is the ``QApplication`` class.
-This class manages the GUI application's control flow and main settings.
-It is important to know that any GUI application using QT requires to have only one QApplication object. This is applicable no matter how many windows the application has any given time.
-Due to the QApplication object is in charge to do different initializations, it must be created before any other objects related to the user interface.
-
-Spyder itself is an instance of ``QApplication``, its starting point is in the following two lines of code (Spyder/Spyder/app/mainwindow.py):
-
- ```python
- QMainWindow.__init__(self)
- qapp = QApplication.instance()
- ```
-
-<span style="color: red"> Every Qt application needs a single instance of this class as the base, from where the Qt *event loop* is controlled.
-
-QApplication has some responsabilities such as, it:
-- Initializes the application with the user's desktop settings.
-- Receives events from the underlying window system and transmits them to the applicable widgets.
-- Defines the application's appearance.
-- Knows the application's windows. For example, you can request which widget is in a specific position using widgetAt().
-
-For more details, you can refer to the official documentation in the [QApplication website](https://doc.qt.io/qt-6/qapplication.html#details).
+Spyder's plugin development consists of extending the functionality of its Qt-based graphical interface.
+Below, we list some of the Qt components that are related with Spyder and its plugins.
 
 ### QMainWindow ###
 
