@@ -9,7 +9,6 @@ Qt is also a complete development framework that offers utilities for building a
 To develop a GUI, we will add graphical elements of interaction known as widgets and arrange them using layouts.
 Then, we interconnect those widgets using customized procedures implemented as functions or methods, allowing to trigger behavior from user interaction.
 
-Spyder's plugin development consists of extending the functionality of its Qt-based graphical interface.
 The following sections describe with more detail some QT components and their main functions.
 
 ## Basic Qt Components
@@ -20,36 +19,21 @@ Qt has some preset components that can include simple representations (shapes, t
 Each type of Qt component is a class starting with the letter ``Q`` followed by a name related to its functionality.
 
 Spyder's plugin development consists of extending the functionality of its Qt-based graphical interface.
-Below, we list some of the Qt components that are related with Spyder and its plugins.
 
-### QMainWindow ###
+Some of these Qt components are explained below.
 
-``QMainWindow`` class provides a main application window and it has its own layout in which you can include toolbars (<span style="color: green">QToolBars</span>), menus (<span style="color: green">QMenuBar</span>), status bars (<span style="color: green">QStatusBar</span>), and dockable widgets (<span style="color: green">QDockWidgets</span>).
+### MainWindow ###
+
+``MainWindow`` class provides a main application window and it has its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt-6/qtoolbar.html), menus [QMenuBar](https://doc.qt.io/qt-6/qmenubar.html), status bars [QStatusBar](https://doc.qt.io/qt-6/qstatusbar.html), and dockable widgets [QDockWidgets](https://doc.qt.io/qt-6/qdockwidget.html).
 
 These features serve as the basis for an application.
 
-<span style="color: green">How the QMainWindow is related to the QApplication?</span>
+For more details, you can refer to the official Qt documentation [MainWindow](https://doc.qt.io/qt-6/qmainwindow.html#details)
 
-For more details, you can refer to the official documentation in the [QMainWindow website](https://doc.qt.io/qt-6/qmainwindow.html#details)
+### Windows
 
-
-### Signals & Slots
-
-In the GUI programming is important to provide a way to communicate objects through notifications.
-In Qt, signals and slots are used to support this communication.
-
-**Signal** is a notification emitted by a widget when a particular event ocurrs.
-Example of these events includes: pressing a button, changing text in an input box, changing text in the window.
-Many signals are initiated by an user action, but this is not a rule.
-Qt's widgets have different predermined signals, but you can add your own signals to the widgets.
-
-**Slot** is a function that is invoked in response to a specific signal.
-<span style="color: red">Functions or methods could be used as slots, by connecting a signal to them.</span>
-<span style="color: red">If a signal sends data, the receiver callable will also receive it.</span>
-Many Qt widgets also have their own built-in slots, so the corresponding widgets are notified automatically.
-Qt's widgets have many pre-defined slots, but it is usual practice to subclass widgets and add your own slots.
-
-For more details, you can refer to the official documentation in the [Signals and slots website](https://doc.qt.io/qt-6/signalsandslots.html)
+If an application requires additional windows that do not block the main window, these are generated as non-parent ``QWidget`` instances.
+These are used for tasks that happen in parallel over long-running processes such as displaying graphs or document editing.
 
 ### Widgets
 
@@ -69,8 +53,6 @@ Interfaces are built by embedding widgets inside widgets, and since they are vis
 A layout indicates how the widgets fill their container, either as columns, rows, cells in a matrix or stacked so that only one is visible at a time.
 Those are the 4 basic layouts available in Qt: ``QHBoxLayout``, ``QVBoxLayout``, ``QGridLayout``, and ``QStackedLayout``.
 
-
-
 ### Actions, Toolbars & Menus
 
 User interfaces of desktop applications usually use ``QToolbar`` and ``QMenu``.
@@ -86,11 +68,23 @@ In Qt, by design ``QDialog`` is a modal (or blocking) window that show in front 
 
 Qt provides some *special dialogs* for the most common use-cases as *file Open/Save*, *font selection*, *error messages*, *color choosing*, *printing*, among others.
 
+### Signals & Slots
 
-### Windows
+In the GUI programming is important to provide a way to communicate objects through notifications.
+In Qt, signals and slots are used to support this communication.
 
-If an application requires additional windows that do not block the main window, these are generated as non-parent ``QWidget`` instances.
-These are used for tasks that happen in parallel over long-running processes such as displaying graphs or document editing.
+**Signal** is a notification emitted by a widget when a particular event ocurrs.
+Example of these events includes: pressing a button, changing text in an input box, changing text in the window.
+Many signals are initiated by an user action, but this is not a rule.
+Qt's widgets have different predermined signals, but you can add your own signals to the widgets.
+
+**Slot** is a function that is invoked in response to a specific signal.
+<span style="color: red">Functions or methods could be used as slots, by connecting a signal to them.</span>
+<span style="color: red">If a signal sends data, the receiver callable will also receive it.</span>
+Many Qt widgets also have their own built-in slots, so the corresponding widgets are notified automatically.
+Qt's widgets have many pre-defined slots, but it is usual practice to subclass widgets and add your own slots.
+
+For more details, you can refer to the official documentation in the [Signals and slots website](https://doc.qt.io/qt-6/signalsandslots.html)
 
 
 ### Events
