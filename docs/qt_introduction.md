@@ -9,22 +9,18 @@ Qt is also a complete development framework that offers utilities for building a
 To develop a GUI, we will add graphical elements of interaction known as widgets and arrange them using layouts.
 Then, we interconnect those widgets using customized procedures implemented as functions or methods, allowing to trigger behavior from user interaction.
 
-The following sections describe with more detail some QT components and their main functions.
-
 ## Basic Qt Components
 
 According to the official [Qt documentation](https://doc.qt.io/qtdesignstudio/quick-components.html): "a component is a reusable building block for a UI".
 Qt has some preset components that can include simple representations (shapes, text or images) or complex user interface (UI) controls (such as sliders).
-
 Each type of Qt component is a class starting with the letter ``Q`` followed by a name related to its functionality.
-
 Spyder's plugin development consists of extending the functionality of its Qt-based graphical interface.
 
-Some of these Qt components are explained below.
+The following sections describe with more detail some QT components and their main functions.
 
 ### MainWindow ###
 
-``MainWindow`` class provides a main application window and it has its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt-6/qtoolbar.html), menus [QMenuBar](https://doc.qt.io/qt-6/qmenubar.html), status bars [QStatusBar](https://doc.qt.io/qt-6/qstatusbar.html), and dockable widgets [QDockWidgets](https://doc.qt.io/qt-6/qdockwidget.html).
+``MainWindow`` class provides a main application window and it has its own layout in which you can include toolbars [QToolBar](https://doc.qt.io/qt-6/qtoolbar.html), menus [QMenuBar](https://doc.qt.io/qt-6/qmenubar.html), status bars [QStatusBar](https://doc.qt.io/qt-6/qstatusbar.html), and dockable widgets [QDockWidgets](https://doc.qt.io/qt-6/qdockwidget.html).
 
 For more details, you can refer to the official Qt documentation [MainWindow](https://doc.qt.io/qt-6/qmainwindow.html#details)
 
@@ -40,9 +36,7 @@ Widgets are the main elements for creating a UI in Qt.
 They can present data and updated information, receive user input (mouse, keyboard, and other events from the window system), and provide a container for grouping other widgets.
 
 ``QWidget`` is the fundamental class in Qt that provides the capability to handle user input events and renders its representation on the screen.
-
 All UI elements provided by Qt are subclasses of QWidget or are used in connection with a QWidget subclass.
-
 You can define your own custom widgets by creating a QWidget or a suitable subclass, and reimplement the virtual event handlers.
 
 There are top-level and child widgets.
@@ -55,29 +49,36 @@ For more details, you can refer to the official Qt documentation [QWidget](https
 ### Layouts
 
 Qt layout system provides a way to arrange and distribute automatically child widgets within a widget taking advantage of the available space.
-This layout system can automatically position and resize widgets when the space available for them changes, ensuring that the user interface remains usable.
+This layout system can automatically position and resize widgets when the space available for them changes, ensuring that the UI remains usable.
 You can use the built-in layout managers to organize your widgets:[QHBoxLayout](https://doc.qt.io/qt-6/qhboxlayout.html), [QVBoxLayout](https://doc.qt.io/qt-6/qvboxlayout.html), [QGridLayout](https://doc.qt.io/qt-6/qgridlayout.html), [QFormLayoutClass](https://doc.qt.io/qt-6/qformlayout.html),and [QStackedLayout](https://doc.qt.io/qt-6/qstackedlayout.html).
+
 For more details, you can refer to the official Qt documentation [Layout Management](https://doc.qt.io/qt-6/layout.html).
 
 ### Actions, Toolbars & Menus
 
 User interfaces of desktop applications usually use toolbars and menus.
-A toolbar is a GUI element that facilites the acces of functions and controls commonly used in an app.
-It can include elements such as buttons, menus, iceons, and search fields.
+A toolbar is a GUI element that facilites acces to commonly used functions and controls in an application.
+It can include elements such as buttons, menus, icons, and search fields.
 It is usually located at the top or bottom of a window.
-A menu is a GUI element that presents a list of options to a user.
+A menu is a GUI element that presents a list of options to the user.
 Qt provides the [QToolBar](https://doc.qt.io/qt-6/qtoolbar.html#details) and [QMenu](https://doc.qt.io/qt-6/qmenu.html) classes.
-Since QToolBar and QMenu are alternative ways to access the same functionality, Qt provides [QAction](https://doc.qt.io/qt-6/qaction.html) as a way to avoid duplication of functions.
-Actions can be added to UI elements such as menus and toolbars, and will automatically keep the UI in sync.
+Since QToolBar and QMenu are alternative ways to access the same functionality, Qt includes [QAction](https://doc.qt.io/qt-6/qaction.html) as a way to avoid duplication of functions.
+Actions can be added to UI elements such as menus and toolbars, and will automatically keep the UI syncronized.
 For example, in a word processor, if the user presses a button on the Bold toolbar, the Bold menu item will be automatically checked.
 
 ### Dialogs
 
-A *Dialog* is a GUI component that communicates with the user.
-Dialogs are commonly used for functions that do not fit into the main interface.
-In Qt, by design ``QDialog`` is a modal (or blocking) window that show in front of the main Window until it is dismissed.
+A Dialog is a GUI component used for brief communications with the user.
+<span style="color:red;">Dialogs are commonly used for functions that do not fit into the main interface.</span>
+A dialog can be included in an application using the QDialog class.
+QDialogs may be modal or modeless.
+A modal dialog blocks input to other visible windows in the same application.
+The user has to end the interaction with the modal dialog and close it to access to any other window in the application.
+For example, dialogs for requesting information or selecting preferences for an application may be modal.
+A modeless dialog operates independently of other windows of the same application.
+For example, find and replace dialogs allow the user to interact with both the modeless dialog and the application's main window.
 
-Qt provides some *special dialogs* for the most common use-cases as *file Open/Save*, *font selection*, *error messages*, *color choosing*, *printing*, among others.
+<span style="color:red;">Qt provides some *special dialogs* for the most common use-cases as *file Open/Save*, *font selection*, *error messages*, *color choosing*, *printing*, among others.</span>
 
 ### Signals & Slots
 
@@ -95,7 +96,7 @@ Qt's widgets have different predermined signals, but you can add your own signal
 Many Qt widgets also have their own built-in slots, so the corresponding widgets are notified automatically.
 Qt's widgets have many pre-defined slots, but it is usual practice to subclass widgets and add your own slots.
 
-For more details, you can refer to the official documentation in the [Signals and slots website](https://doc.qt.io/qt-6/signalsandslots.html)
+For more details, you can refer to the official Qt documentation [Signals and slots](https://doc.qt.io/qt-6/signalsandslots.html)
 
 
 ### Events
