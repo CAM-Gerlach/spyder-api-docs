@@ -7,7 +7,7 @@
 It is a complete development framework that offers utilities for building applications, and has extensions for networking, Bluetooth, charts, 3D rendering, and navigation, among others.
 
 To develop a GUI, we start with the core building blocks—graphical elements known as *widgets*—and arrange them using *layouts*, themselves contained within other widgets and ultimately application *windows*.
-Then, we interconnect these widgets using special functions and methods (called *slots*) that are triggered by receiving connected *signals*, while *events* are emitted on user interaction.
+Then, we interconnect these widgets using special functions and methods (called *slots*) that are triggered by receiving connected *signals*.
 In turn, *actions* are the common building blocks of toolbars and menu items representing a specific option the user can select.
 
 
@@ -94,12 +94,3 @@ Functions and methods can be used as slots by connecting a signal to them.
 If a signal sends data, the receiving callable will receive it.
 Many Qt widgets also have their own built-in slots, so the corresponding widgets are notified automatically.
 You can also add your own slots to manage particular signals that you are interested in.
-
-
-### Events
-
-An [Event](https://doc.qt.io/qt/eventsandfilters.html) denotes every interaction the user has with a Qt application.
-In Qt, events are objects, derived from the abstract [QEvent](https://doc.qt.io/qt/qevent.html) class.
-There are several types of events designed to address different types of interactions.
-According to the [Qt Event System documentation](https://doc.qt.io/qt/eventsandfilters.html), "when an event occurs, Qt creates an event object to represent it by constructing an instance of the appropriate QEvent subclass, and delivers it to a particular instance of QObject (or one of its subclasses) by calling its event() function.
-This function does not handle the event itself; based on the type of event delivered, it calls an event handler for that specific type of event, and sends a response based on whether the event was accepted or ignored."
