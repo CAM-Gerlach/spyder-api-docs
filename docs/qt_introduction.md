@@ -22,18 +22,6 @@ Much of Spyder plugin development consists of extending the functionality of its
 Common Qt components are summarized below in the following sections, and linked to their full reference in the Qt documentation.
 
 
-### MainWindow
-
-The [MainWindow](https://doc.qt.io/qt/qmainwindow.html#details) class provides a main application window with its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt/qtoolbar.html)), menus ([QMenuBar](https://doc.qt.io/qt/qmenubar.html)), status bars ([QStatusBar](https://doc.qt.io/qt/qstatusbar.html)), and dockable widgets ([QDockWidget](https://doc.qt.io/qt/qdockwidget.html)).
-
-
-### Windows
-
-A [window](https://doc.qt.io/qt/application-windows.html) is a widget that is not embedded in a parent widget.
-When an application requires additional windows that do not block the main window, they can be provided as ``QWidget`` instances without a parent.
-These can be used for parallel tasks that take place in long-running processes, such as displaying graphs or editing documents.
-
-
 ### Widgets
 
 [Widgets](https://doc.qt.io/qt/qtwidgets-index.html) are the main building blocks for creating a UI in Qt.
@@ -45,6 +33,18 @@ You can define your own custom widgets by creating a QWidget or a suitable subcl
 
 Top-level widgets have no parent and are an independent window, while child widgets are displayed within its parent widget.
 Most widgets in Qt are mainly useful as child widgets.
+
+
+### MainWindow
+
+The [MainWindow](https://doc.qt.io/qt/qmainwindow.html#details) class provides a main application window with its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt/qtoolbar.html)), menus ([QMenuBar](https://doc.qt.io/qt/qmenubar.html)), status bars ([QStatusBar](https://doc.qt.io/qt/qstatusbar.html)), and dockable widgets ([QDockWidget](https://doc.qt.io/qt/qdockwidget.html)).
+
+
+### Windows
+
+A [window](https://doc.qt.io/qt/application-windows.html) is a widget that is not embedded in a parent widget.
+When an application requires additional windows that do not block the main window, they can be provided as ``QWidget`` instances without a parent.
+These can be used for parallel tasks that take place in long-running processes, such as displaying graphs or editing documents.
 
 
 ### Layouts
