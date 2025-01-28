@@ -380,17 +380,15 @@ Let's run Cookiecutter to generate our plugin structure:
 .. code-block:: console
 
    $ cookiecutter https://github.com/spyder-ide/spyder5-plugin-cookiecutter
-   You\'ve downloaded /home/mapologo/.cookiecutters/spyder5-plugin-cookiecutter before.
-   Is it okay to delete and re-download it? [yes]:
-   full_name [Spyder Bot]: Francisco Palm # It's your name, better John Doe
-   email [spyder.python@gmail.com]: fpalm@qu4nt.com
-   github_username [spyder-bot]: map0logo
+   full_name [Spyder Bot]: Spyder Man  # YOUR NAME
+   email [spyder.python@gmail.com]: spyder.python@gmail.com  # YOUR EMAIL
+   github_username [spyder-bot]: spyder-ide
    github_org [spyder-ide]:
    project_name [Spyder Boilerplate]: Spyder Pomodoro Timer
    project_short_description [Boilerplate needed to create a Spyder Plugin.]: A very simple pomodoro timer that shows in the status bar.
    project_pypi_name [spyder-pomodoro-timer]:
    project_package_name [spyder_pomodoro_timer]:
-   pypi_username [map0logo]:
+   pypi_username [spyder-ide]:
    Select plugin_type:
    1 - Spyder Dockable Plugin
    2 - Spyder Plugin
@@ -506,8 +504,8 @@ The first working version we are building here we'll refer to as ``HELLO WORLD``
 
    We will include links to the GitHub diffs between the tags at the end of each subsection, as an aid to check the progressive changes that we'll make in the code.
 
-.. _Spyder-Pomodoro-Timer repository: https://github.com/map0logo/spyder-pomodoro-timer
-.. _INITIAL: https://github.com/map0logo/spyder-pomodoro-timer/tree/v0.1.1-dev0
+.. _Spyder-Pomodoro-Timer repository: https://github.com/spyder-ide/spyder-pomodoro-timer
+.. _INITIAL: https://github.com/spyder-ide/spyder-pomodoro-timer/tree/v0.1.1-dev0
 
 
 .. _tutorial-building-widgets-py:
@@ -610,7 +608,7 @@ To finish the implementation of our widget, ``BaseTimerStatus`` requires the fol
        """Get current time of the timer."""
        return self.value
 
-Here's the `INITIAL -> HELLO WORLD widgets.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/c7b5cc6c4ce3c4afcd3cb9d3474bdabe2b81e060>`__ that sums everything up.
+Here's the `INITIAL -> HELLO WORLD widgets.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/c7b5cc6c4ce3c4afcd3cb9d3474bdabe2b81e060>`__ that sums everything up.
 
 .. _QtAwesome: https://github.com/spyder-ide/qtawesome
 
@@ -663,7 +661,7 @@ Then, we edit the ``setup()`` method to add an instance of our widget.
            # Widgets
            self.pomodoro_timer_status = PomodoroTimerStatus(self)
 
-Here's the full `INITIAL -> HELLO WORLD container.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/73dbc2c010274613357d6d8d2e4d1428dc030c77>`__, as a review.
+Here's the full `INITIAL -> HELLO WORLD container.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/73dbc2c010274613357d6d8d2e4d1428dc030c77>`__, as a review.
 
 
 .. _tutorial-building-plugin-py:
@@ -808,7 +806,7 @@ In summary, we implemented the following structure:
 We :ref:`created a widget <tutorial-building-widgets-py>`, :ref:`added it to a container <tutorial-building-container-py>`.
 In the plugin, we accessed the instance of that widget and added it to the status bar.
 
-To summarize, here's the full diff, `INITIAL -> HELLO WORLD plugin.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/d368e695e096e1a054e043671f98b5f0021b6822>`__.
+To summarize, here's the full diff, `INITIAL -> HELLO WORLD plugin.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/d368e695e096e1a054e043671f98b5f0021b6822>`__.
 
 
 
@@ -927,7 +925,7 @@ If we run Spyder again, we will see that our timer has started counting down.
 .. image:: images/workshop-3/pd_timer_countdown.gif
    :alt: Animated screen capture showing the time in the statusbar widget counting down
 
-For reference, the changes in this revision ("``TIMER``") are shown in the `HELLO WORLD -> TIMER widgets.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/5d72eaf2c8ce6c7760529c90121837e275757974>`__.
+For reference, the changes in this revision ("``TIMER``") are shown in the `HELLO WORLD -> TIMER widgets.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/5d72eaf2c8ce6c7760529c90121837e275757974>`__.
 
 
 
@@ -989,7 +987,7 @@ with
 
            if self.countdown > 0 and not self.pause:
 
-Here's a full listing of the `TIMER -> TOOLBAR widgets.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/48a946fdbb934b9b85facd3c1b77fc8999e049a9>`__.
+Here's a full listing of the `TIMER -> TOOLBAR widgets.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/48a946fdbb934b9b85facd3c1b77fc8999e049a9>`__.
 
 
 .. _tutorial-toolbar-actions:
@@ -1027,7 +1025,7 @@ Here, we create three classes:
 
    Lightweight class definitions with class constants facilitates the  exchange of this information with minimal complexity.
 
-To review, you can check out the `TIMER -> TOOLBAR api.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/cf540f972f37aaf5d6ccc8524cbcc7aeae9c483b>`__.
+To review, you can check out the `TIMER -> TOOLBAR api.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/cf540f972f37aaf5d6ccc8524cbcc7aeae9c483b>`__.
 
 
 .. _tutorial-toolbar-behavior:
@@ -1167,7 +1165,7 @@ Finally, we insert the appropriate public methods at the end of the ``SpyderPomo
 These methods set the ``pause`` attribute of ``pomodoro_timer_status``,
 and restart the countdown in the case of ``stop_pomodoro_timer()``.
 
-Summing up, here's the `TIMER -> TOOLBAR container.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/492f30771285af937a8a75d69e4e879d21f9dc0f>`__.
+Summing up, here's the `TIMER -> TOOLBAR container.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/492f30771285af937a8a75d69e4e879d21f9dc0f>`__.
 
 
 .. _tutorial-toolbar-registration:
@@ -1193,7 +1191,7 @@ And use this plugin's API to add the Pomodoro toolbar we created in the ``contai
            toolbar = self.get_plugin(Plugins.Toolbar)
            toolbar.add_application_toolbar(container.pomodoro_timer_toolbar)
 
-Here's the final `TIMER -> ACTIONS plugin.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/012c5ef6568114ea945501d44efb30afeefbad98>`__.
+Here's the final `TIMER -> ACTIONS plugin.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/012c5ef6568114ea945501d44efb30afeefbad98>`__.
 
 
 .. _tutorial-toolbar-reviewing:
@@ -1281,7 +1279,7 @@ It must be incremented when adding, deleting, or renaming configurable parameter
 .. note::
    We've also moved the definition of ``POMODORO_DEFAULT`` from ``widgets.py`` to ``config.py``, as we now have a dedicated place for default configuration values.
 
-For reference, here's the `ACTIONS -> CONFPAGE config.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/b71457c96013dc0b9c27d588f46568a81e9a2f0c>`__.
+For reference, here's the `ACTIONS -> CONFPAGE config.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/b71457c96013dc0b9c27d588f46568a81e9a2f0c>`__.
 
 
 .. _tutorial-config-page:
@@ -1341,7 +1339,7 @@ Each parameter corresponds to a ``QGridLayout`` where labels and inputs (in this
    Configuration pages in Spyder provide some helper methods to facilitate this work.
    For instance, the ``create_spinbox()`` method allows us to instantiate and initialize the widgets corresponding to the prefix and suffix labels together with the spinbox, all in a single step.
 
-You can see the all the changes we've made here in the `ACTIONS -> CONFPAGE confpage.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/bd3bcf2ce895c440fb2d6b80233100c6d86822fe>`__.
+You can see the all the changes we've made here in the `ACTIONS -> CONFPAGE confpage.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/bd3bcf2ce895c440fb2d6b80233100c6d86822fe>`__.
 
 
 .. _tutorial-config-changes:
@@ -1389,7 +1387,7 @@ Then, we can add the ``set_pomodoro_limit()`` method that updates our configurab
 
 .. note:: The ``@on_conf_change`` decorator is responsible for capturing the signal generated when changing a specific config option.
 
-To view all these changes together, see the `ACTIONS -> CONFPAGE widgets.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/b94cee118bf887b52934230a35d67a0080551a68>`__.
+To view all these changes together, see the `ACTIONS -> CONFPAGE widgets.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/b94cee118bf887b52934230a35d67a0080551a68>`__.
 
 
 .. _tutorial-config-registering:
@@ -1423,7 +1421,7 @@ If we modify that value, we should see how the corresponding status bar timer up
 
 Now our example plugin is ready to be published!
 
-For a review of our changes here, see the `ACTIONS -> CONFPAGE plugin.py diff <https://github.com/map0logo/spyder-pomodoro-timer/commit/b238b133d46a52e2d6e57ae938964094a45e7177>`__.
+For a review of our changes here, see the `ACTIONS -> CONFPAGE plugin.py diff <https://github.com/spyder-ide/spyder-pomodoro-timer/commit/b238b133d46a52e2d6e57ae938964094a45e7177>`__.
 
 
 
