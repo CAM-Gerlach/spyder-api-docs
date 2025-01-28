@@ -28,28 +28,18 @@ Common Qt components are summarized below in the following sections, and linked 
 They can display information, receive user input (mouse, keyboard, and other events from the window system), and provide a container for grouping other widgets.
 
 [QWidget](https://doc.qt.io/qt/qwidget.html) is the fundamental class in Qt that provides the capability to handle user input events and renders its representation on the screen.
-All UI elements provided by Qt are subclasses of QWidget or are used in connection with a QWidget subclass.
-You can define your own custom widgets by creating a QWidget or a suitable subclass, and reimplementing the virtual event handlers.
-
-Top-level widgets have no parent and are an independent window, while child widgets are displayed within its parent widget.
-Most widgets in Qt are mainly useful as child widgets.
+All UI elements provided by Qt are subclasses of ``QWidget`` or are used in connection with a ``QWidget`` subclass.
+You can define your own custom widget class by subclassing QWidget, and adding or reimplementing the methods that you need.
 
 
-### MainWindow
+### Windows and MainWindows
 
-The [MainWindow](https://doc.qt.io/qt/qmainwindow.html#details) class provides a main application window with its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt/qtoolbar.html)), menus ([QMenuBar](https://doc.qt.io/qt/qmenubar.html)), status bars ([QStatusBar](https://doc.qt.io/qt/qstatusbar.html)), and dockable widgets ([QDockWidget](https://doc.qt.io/qt/qdockwidget.html)).
-
-
-### Windows
-
-A [window](https://doc.qt.io/qt/application-windows.html) is a widget that is not embedded in a parent widget.
-When an application requires additional windows that do not block the main window, they can be provided as ``QWidget`` instances without a parent.
-These can be used for parallel tasks that take place in long-running processes, such as displaying graphs or editing documents.
+A Qt [window](https://doc.qt.io/qt/application-windows.html) is a widget that is not embedded in a parent widget. The [MainWindow](https://doc.qt.io/qt/qmainwindow.html#details) class provides a main application window with its own layout in which you can include toolbars ([QToolBar](https://doc.qt.io/qt/qtoolbar.html)), menus ([QMenuBar](https://doc.qt.io/qt/qmenubar.html)), status bars ([QStatusBar](https://doc.qt.io/qt/qstatusbar.html)), and dockable widgets ([QDockWidget](https://doc.qt.io/qt/qdockwidget.html)).
 
 
 ### Layouts
 
-Qt's [layout](https://doc.qt.io/qt/layout.html) system provides a way to arrange and automatically distribute child widgets, taking advantage of the available space.
+Qt's [layout](https://doc.qt.io/qt/layout.html) system provides a way for a widget to arrange and automatically distribute child widgets, taking advantage of the available space.
 It can automatically position and resize widgets when the space available for them changes, ensuring that the UI remains usable.
 You can use the built-in layout managers to organize your widgets:
 
@@ -62,16 +52,16 @@ You can use the built-in layout managers to organize your widgets:
 
 ### Actions, Menus & Toolbars
 
-User interfaces of desktop applications often rely on menus and toolbars, for which Qt provides the [QToolBar](https://doc.qt.io/qt/qtoolbar.html#details) and [QMenu](https://doc.qt.io/qt/qmenu.html) classes.
+User interfaces of desktop applications often rely on menus and toolbars to display groups of commands and options to the user, for which Qt provides the [QToolBar](https://doc.qt.io/qt/qtoolbar.html#details) and [QMenu](https://doc.qt.io/qt/qmenu.html) classes.
 Menus present a list of items to the user when clicked and may be either global or context-specific.
 Toolbars display commonly-used controls as a ribbon of buttons (and often other interactive elements).
-Since the same individual items can be included multiple places in the UI, items only need to be created once as a [QActions](https://doc.qt.io/qt/qaction.html) that can be added to any menu or toolbar.
+Since the same individual items can be included in multiple places in the UI, items only need to be created once as a [QAction](https://doc.qt.io/qt/qaction.html) that can be added to any menu or toolbar.
 Their state will then be automatically synchronized: for example, if the user toggles the "Bold" toolbar button, the "Bold" menu item will also be (un)checked.
 
 
 ### Dialogs
 
-A [dialog](https://doc.qt.io/qt/dialogs.html) is a GUI component used for temporary messages and interactions, such as an error message or configuration panel.
+A [dialog](https://doc.qt.io/qt/dialogs.html) is a new, smaller window for temporary interactions and messages, such as a configuration panel or a warning notification.
 The [QDialog](https://doc.qt.io/qt/qdialog.html) class is used to create dialogs, which can be set as either modal or modeless.
 A modal dialog blocks interaction with other windows in the same application until it is dismissed, useful for an error message or requesting key information to complete a requested action.
 A modeless dialog behaves as an independent window without blocking the user from doing anything else, such as for a find and replace feature where a user needs to interact with other windows.
@@ -82,15 +72,14 @@ Qt provides some [special dialogs](https://doc.qt.io/qt/dialogs.html) for common
 
 ### Signals & Slots
 
-GUI programming requires a way to notify and communicate with other objects, which Qt provides via [signals and slots](https://doc.qt.io/qt/signalsandslots.html).
+GUI programming requires a way to notify and communicate with other objects in the application, which Qt provides via [signals and slots](https://doc.qt.io/qt/signalsandslots.html).
 
-A [Signal](https://doc.qt.io/qt/signalsandslots.html#signals) is a notification emitted by a widget when a particular event occurs.
+A [Signal](https://doc.qt.io/qt/signalsandslots.html#signals) is a notification emitted by a widget (as well as non-graphical Qt objects) when a particular event occurs.
 For example, this might include pressing a button, changing text in an input box, or moving a slider.
-Many signals are initiated by an user action, but this is not always the case.
+Many signals are initiated by an user action, but they can also be issued for other events, like completing a process.
 Qt's widgets have different predetermined signals, and you can also add your own.
 
-A [Slot](https://doc.qt.io/qt/signalsandslots.html#slots) is a function that is invoked in response to a specific signal.
+A [Slot](https://doc.qt.io/qt/signalsandslots.html#slots) is a function or method that is invoked in response to a specific signal.
 Functions and methods can be used as slots by connecting a signal to them.
-If a signal sends data, the receiving callable will receive it.
-Many Qt widgets also have their own built-in slots, so the corresponding widgets are notified automatically.
-You can also add your own slots to manage particular signals that you are interested in.
+If a signal sends data, the receiving callable will receive it as arguments.
+You can add your own functions as slots to manage particular signals (built-in or custom) that you are interested in.
