@@ -1,0 +1,5 @@
+[submodule "spyder"]
+	path = spyder
+	url = https://github.com/spyder-ide/spyder.git
+	branch = 6.x
+	update = rebase
