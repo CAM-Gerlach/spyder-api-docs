@@ -257,6 +257,22 @@ def clean(session):
     _clean(session)
 
 
+def _sync_spyder(session):
+    """Sync the latest docstrings from upstream Spyder into the submodule."""
+    foreach_cmd = ["git", "submodule", "--quiet", "foreach"]
+    session.run(
+        *foreach_cmd,
+        "git fetch upstream 6.x && git rebase FETCH_HEAD",
+        external=True,
+    )
+
+
+@nox.session(name="sync-spyder")
+def sync_spyder(session):
+    """Sync the latest docstrings from upstream Spyder into the submodule."""
+    _sync_spyder(session)
+
+
 # --- Set up --- #
 
 
@@ -323,6 +339,43 @@ def setup_remotes(session):
     _setup_remotes(session)
 
 
+def _setup_submodule_remotes(session):
+    """Set up the upstream submodule remote to point to the Spyder repo."""
+    foreach_cmd = ["git", "submodule", "--quiet", "foreach"]
+    spyder_repo = "spyder"
+
+    # Check if an upstream remote already exists
+    existing_remotes = (
+        session.run(
+            *foreach_cmd,
+            "git remote",
+            external=True,
+            silent=True,
+            log=False,
+        )
+        .strip()
+        .split("\n")
+    )
+
+    if "upstream" in existing_remotes:
+        return
+
+    spyder_repo_url = REPO_URL_HTTPS.format(user=ORG_NAME, repo=spyder_repo)
+    session.run(
+        *foreach_cmd,
+        f"git remote add upstream '{spyder_repo_url}'",
+        external=True,
+    )
+
+    session.run(*foreach_cmd, "git fetch --all", external=True)
+
+
+@nox.session(name="setup-submodule-remotes")
+def setup_submodule_remotes(session):
+    """Set up the upstream submodule remote to point to the Spyder repo."""
+    _setup_submodule_remotes(session)
+
+
 def _ignore_revs(session):
     """Configure the Git ignore revs file to the repo default."""
     if not IGNORE_REVS_FILE:
@@ -342,7 +395,50 @@ def ignore_revs(session):
     _ignore_revs(session)
 
 
-@nox.session()
+def _config_submodules(session):
+    """Configure Git to automatically recurse into Git submodules."""
+    session.run(
+        "git",
+        "config",
+        "--local",
+        "submodule.recurse",
+        "true",
+        external=True,
+    )
+    session.run(
+        "git",
+        "config",
+        "--local",
+        "push.recurseSubmodules",
+        "check",
+        external=True,
+    )
+
+
+@nox.session(name="config-submodules")
+def config_submodules(session):
+    """Initialize and download all Git submodules."""
+    _config_submodules(session)
+
+
+def _init_submodules(session):
+    """Initialize and download all Git submodules."""
+    session.run(
+        "git",
+        "submodule",
+        "update",
+        "--init",
+        external=True,
+    )
+
+
+@nox.session(name="init-submodules")
+def init_submodules(session):
+    """Initialize and download all Git submodules."""
+    _init_submodules(session)
+
+
+@nox.session
 def setup(session):
     """Set up the project; pass --https or --ssh to specify Git URL type."""
     session.notify(
@@ -350,6 +446,9 @@ def setup(session):
         posargs=(
             [
                 _ignore_revs,
+                _config_submodules,
+                _init_submodules,
+                _setup_submodule_remotes,
                 _setup_remotes,
                 _install_hooks,
                 _clean,
