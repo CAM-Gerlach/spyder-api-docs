@@ -145,7 +145,7 @@ Regardless of the tool you use, make sure to remember to always activate your en
 
 #### Conda
 
-To create an environment with Conda (recommended), simply execute the following:
+To create an environment with Conda (recommended), execute the following:
 
 ```shell
 conda create -c conda-forge -n spyder-api-docs-env python
@@ -194,7 +194,12 @@ Or if using ``pip``, you can grab them with:
 python -m pip install -r requirements.txt
 ```
 
+If you plan to generate and build the API reference documentation extracted from Spyder's docstrings, you'll also need to install Spyder in development mode as well as its dev dependencies.
+To do so, you can run the ``install_dev_repos.py`` script in the ``spyder`` submodule:
 
+```shell
+python install_dev_repos.py
+```
 
 
 ## Installing and Using the Pre-Commit Hooks
@@ -249,7 +254,13 @@ To build the project using Nox, just run
 nox -s build
 ```
 
-and can then open the rendered output in your default web browser with
+or, to also extract, generate and build the API reference from Spyder's docstrings (expensive the first time), pass the ``-t autodoc`` argument to any build command:
+
+```shell
+nox -s build -- -t autodoc
+```
+
+and then open the rendered output in your default web browser with
 
 ```shell
 nox -s serve
@@ -258,7 +269,7 @@ nox -s serve
 Alternatively, to automatically rebuild the project when changes occur, you can invoke
 
 ```shell
-nox -s autobuild
+nox -s autorebuild
 ```
 
 You can also pass your own custom [Sphinx build options](https://www.sphinx-doc.org/en/master/man/sphinx-build.html) after a ``--`` separator, which are added to the default set.
@@ -266,6 +277,12 @@ For example, to rebuild just the install guide and FAQ in verbose mode with the 
 
 ```shell
 nox -s build -- --verbose --builder dirhtml -- index.rst
+```
+
+When changing build options (particularly autodoc), cleaning the generated files avoids spurious errors:
+
+```shell
+nox -s clean
 ```
 
 
@@ -277,7 +294,20 @@ For manual installations, you can invoke Sphinx yourself with the appropriate op
 python -m sphinx -n -W --keep-going docs docs/_build/html
 ```
 
+or to also extract, generate and build the API reference from Spyder's docstrings (requires Spyder and its dependencies to be installed in your environment):
+
+```shell
+python -I -m sphinx -n --keep-going -t autodoc docs docs/_build/html
+```
+
 Then, navigate to the ``_build/html`` directory inside the ``spyder-docs`` repository and open ``index.html`` (the main page of the docs) in your preferred browser.
+
+When changing build options (particularly autodoc), cleaning the generated files first avoids spurious errors:
+
+```shell
+rm -r docs/_autosummary/
+rm -r docs/_build/
+```
 
 
 
