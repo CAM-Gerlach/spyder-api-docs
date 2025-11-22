@@ -4,15 +4,15 @@
 import contextlib
 import logging
 import os
-import tempfile
 import shutil
 import sys
+import tempfile
 import webbrowser
 from pathlib import Path
 
 # Third party imports
-import nox  # pylint: disable=import-error
-import nox.logger  # pylint: disable=import-error
+import nox
+import nox.logger
 
 
 # --- Global constants --- #
@@ -230,7 +230,7 @@ def _run(session):
     session.run(*posargs)
 
 
-@nox.session()
+@nox.session
 def run(session):
     """Run any command."""
     session.notify("_execute", posargs=([_run], *session.posargs))
@@ -485,7 +485,6 @@ def serve_docs(_session):
 def _prepare_multiversion(_session=None):
     """Execute the pre-deployment steps for multi-version support."""
     # pylint: disable=import-outside-toplevel
-    # pylint: disable=import-error
 
     sys.path.append(str(SCRIPT_DIR))
     import generateredirects

@@ -28,10 +28,7 @@
 import datetime
 
 # Third party imports
-# pylint: disable-next = import-error
 from docutils import nodes
-
-# pylint: disable-next = import-error
 from docutils.parsers.rst import Directive, directives
 
 
@@ -43,7 +40,7 @@ UTC_DATE = datetime.datetime.now(datetime.timezone.utc)
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = "1.0"
+needs_sphinx = "5"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named "sphinx.ext.*") or your custom ones.
@@ -215,7 +212,7 @@ texinfo_documents = [
 # }
 
 
-# -- Options for Linkcheck --------------------------------------------------
+# -- Options for Linkcheck ---------------------------------------------
 
 linkcheck_ignore = [
     # Virtual fragment ids
@@ -299,7 +296,6 @@ class Youtube(IFrameVideo):
             '<iframe src="https://www.youtube.com/embed/%(video_id)s',
             '?start=%(start)s" ',
             'width="%(width)u" height="%(height)u" frameborder="0" ',
-            # pylint: disable = inconsistent-quotes
             "webkitAllowFullScreen mozallowfullscreen allowfullscreen ",
             'class="align-%(align)s"></iframe></div></div>',
         ]
