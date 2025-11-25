@@ -1,3 +1,5 @@
+# pylint: disable = no-name-in-module
+
 # Third party imports
 from spyder.api.plugins import Plugins, SpyderPluginV2
 from spyder.plugins.core.api import ApplicationMenus, HelpMenuSections

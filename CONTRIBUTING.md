@@ -25,9 +25,9 @@ Let us know if you have any further questions, and we look forward to your contr
 - [Cloning the Repository](#cloning-the-repository)
 - [Setting Up a Development Environment with Nox (Recommended)](#setting-up-a-development-environment-with-nox-recommended)
 - [Setting Up a Development Environment Manually](#setting-up-a-development-environment-manually)
+  - [Configure Git](#configure-git)
   - [Create and activate a fresh environment](#create-and-activate-a-fresh-environment)
   - [Install dependencies](#install-dependencies)
-  - [Add the upstream remote](#add-the-upstream-remote)
 - [Installing and Using the Pre-Commit Hooks](#installing-and-using-the-pre-commit-hooks)
 - [Building the Project](#building-the-project)
   - [Build with Nox](#build-with-nox)
@@ -35,7 +35,8 @@ Let us know if you have any further questions, and we look forward to your contr
 - [Contributing Changes](#contributing-changes)
   - [Decide which branch to use](#decide-which-branch-to-use)
   - [Prepare your topic branch](#prepare-your-topic-branch)
-  - [Commit your changes](#commit-your-changes)
+  - [Sync the latest Spyder docstrings (optional)](#sync-the-latest-spyder-docstrings-optional)
+  - [Make and commit your changes](#make-and-commit-your-changes)
   - [Push your branch](#push-your-branch)
   - [Submit a Pull Request](#submit-a-pull-request)
 - [Standards and Conventions](#standards-and-conventions)
@@ -58,10 +59,10 @@ If referring to a specific line or file, please be sure to provide a snippet of 
 ## Cloning the Repository
 
 First, navigate to the [project repository](https://github.com/spyder-ide/spyder-api-docs) in your web browser and press the ``Fork`` button to make a personal copy of the repository on your own GitHub account.
-Then, click the ``Clone or Download`` button on your repository, copy the link and run the following on the command line to clone the repo:
+Then, click the ``Clone or Download`` button on your repository, copy the link and run the following on the command line to clone the repo (with submodules):
 
 ```shell
-git clone <LINK-TO-YOUR-REPO>
+git clone --recurse-submodules <LINK-TO-YOUR-REPO>
 ```
 
 After cloning the repository, navigate to its new directory using the `cd` command:
@@ -119,6 +120,22 @@ For advanced users, if you'd prefer to also have your own local environment with
 **Note**: You may need to substitute ``python3`` for ``python`` in the commands below on some Linux distros where ``python`` isn't mapped to ``python3`` (yet).
 
 
+### Configure Git
+
+Make sure to set the upstream Git remote to the official Spyder-API-Docs repo with:
+
+```shell
+git remote add upstream https://github.com/spyder-ide/spyder-api-docs.git
+```
+
+It's also a good idea to configure Git to automatically pull, checkout and push submodules:
+
+```shell
+git config --local submodule.recurse true
+git config --local push.recurseSubmodules check
+```
+
+
 ### Create and activate a fresh environment
 
 We highly recommend you create and activate a virtual environment to avoid any conflicts with other packages on your system or causing any other issues.
@@ -128,7 +145,7 @@ Regardless of the tool you use, make sure to remember to always activate your en
 
 #### Conda
 
-To create an environment with Conda (recommended), simply execute the following:
+To create an environment with Conda (recommended), execute the following:
 
 ```shell
 conda create -c conda-forge -n spyder-api-docs-env python
@@ -177,15 +194,12 @@ Or if using ``pip``, you can grab them with:
 python -m pip install -r requirements.txt
 ```
 
-
-### Add the upstream remote
-
-Make sure to set the upstream Git remote to the official Spyder-API-Docs repo with:
+If you plan to generate and build the API reference documentation extracted from Spyder's docstrings, you'll also need to install Spyder in development mode as well as its dev dependencies.
+To do so, you can run the ``install_dev_repos.py`` script in the ``spyder`` submodule:
 
 ```shell
-git remote add upstream https://github.com/spyder-ide/spyder-api-docs.git
+python install_dev_repos.py
 ```
-
 
 
 ## Installing and Using the Pre-Commit Hooks
@@ -240,7 +254,13 @@ To build the project using Nox, just run
 nox -s build
 ```
 
-and can then open the rendered output in your default web browser with
+or, to also extract, generate and build the API reference from Spyder's docstrings (expensive the first time), pass the ``-t autodoc`` argument to any build command:
+
+```shell
+nox -s build -- -t autodoc
+```
+
+and then open the rendered output in your default web browser with
 
 ```shell
 nox -s serve
@@ -249,7 +269,7 @@ nox -s serve
 Alternatively, to automatically rebuild the project when changes occur, you can invoke
 
 ```shell
-nox -s autobuild
+nox -s autorebuild
 ```
 
 You can also pass your own custom [Sphinx build options](https://www.sphinx-doc.org/en/master/man/sphinx-build.html) after a ``--`` separator, which are added to the default set.
@@ -257,6 +277,12 @@ For example, to rebuild just the install guide and FAQ in verbose mode with the 
 
 ```shell
 nox -s build -- --verbose --builder dirhtml -- index.rst
+```
+
+When changing build options (particularly autodoc), cleaning the generated files avoids spurious errors:
+
+```shell
+nox -s clean
 ```
 
 
@@ -268,7 +294,20 @@ For manual installations, you can invoke Sphinx yourself with the appropriate op
 python -m sphinx -n -W --keep-going docs docs/_build/html
 ```
 
+or to also extract, generate and build the API reference from Spyder's docstrings (requires Spyder and its dependencies to be installed in your environment):
+
+```shell
+python -I -m sphinx -n --keep-going -t autodoc docs docs/_build/html
+```
+
 Then, navigate to the ``_build/html`` directory inside the ``spyder-docs`` repository and open ``index.html`` (the main page of the docs) in your preferred browser.
+
+When changing build options (particularly autodoc), cleaning the generated files first avoids spurious errors:
+
+```shell
+rm -r docs/_autosummary/
+rm -r docs/_build/
+```
 
 
 
@@ -295,7 +334,40 @@ git switch -c <FEATURE-BRANCH>
 ```
 
 
-### Commit your changes
+### Sync the latest Spyder docstrings (optional)
+
+*If* your pull request requires the latest docstring changes from the Spyder repo, or there's a reason to manually update them, you can update the submodule to the latest stable branch either with Nox:
+
+```shell
+nox -s sync-spyder
+```
+
+or manually:
+
+```shell
+git submodule update --remote
+```
+
+**Note**: If using the manual command and you've checked out the submodule to a topic branch tracking your fork rather than the upstream Spyder repository, you'll need to either check out `6.x` first (setting it to track the main Spyder repo if it isn't already):
+
+```shell
+cd spyder
+git switch 6.x
+git --set-upstream-to upstream 6.x  # If required
+cd ..
+```
+
+Or, to integrate the changes into your own branch (assuming `upstream` is the Spyder repository):
+
+```shell
+cd spyder
+git fetch upstream 6.x
+git rebase FETCH_HEAD
+cd ..
+```
+
+
+### Make and commit your changes
 
 Once you've made and tested your changes, add them to the staging area, and then commit them with a descriptive message.
 Commit messages should be

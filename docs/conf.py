@@ -15,48 +15,43 @@
 # serve to show the default.
 
 
-# If extensions (or modules to document with autodoc) are in another
-# directory, add these directories to sys.path here. If the directory is
-# relative to the documentation root, use os.path.abspath to make it
-# absolute, like shown here.
-#
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
-
 # Standard library imports
 import datetime
+import sys
+from pathlib import Path
 
 # Third party imports
-# pylint: disable-next = import-error
 from docutils import nodes
-
-# pylint: disable-next = import-error
 from docutils.parsers.rst import Directive, directives
 
 
 # Constants
 UTC_DATE = datetime.datetime.now(datetime.timezone.utc)
 
+# Make Spyder available on $PATH for API documentation
+sys.path.insert(0, str(Path(__file__).parents[1].resolve() / "spyder"))
+
 
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = "1.0"
+needs_sphinx = "5"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named "sphinx.ext.*") or your custom ones.
 extensions = [
     "myst_parser",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = []  # "_templates"
+templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -104,7 +99,9 @@ pygments_style = "sphinx"
 todo_include_todos = False
 
 # Intersphinx configuration
+# pylint: disable-next = consider-using-namedtuple-or-dataclass
 intersphinx_mapping = {
+    "python": ("https://docs.python.org/", None),
     "spyder": ("https://docs.spyder-ide.org/current/", None),
 }
 
@@ -136,6 +133,9 @@ html_favicon = "_static/favicon.ico"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# Warning suppression
+suppress_warnings = []
 
 
 # -- Options for HTMLHelp output ---------------------------------------
@@ -215,7 +215,7 @@ texinfo_documents = [
 # }
 
 
-# -- Options for Linkcheck --------------------------------------------------
+# -- Options for Linkcheck ---------------------------------------------
 
 linkcheck_ignore = [
     # Virtual fragment ids
@@ -235,6 +235,35 @@ linkcheck_ignore = [
 # --- Myst parser options
 # See: https://myst-parser.readthedocs.io/
 myst_config = {}
+
+
+# -- Options for Autodoc/Autosummary -----------------------------------
+
+# Include Python objects as they appear in source files
+# Default: alphabetically ('alphabetical')
+autodoc_member_order = "bysource"
+
+# Default flags used by autodoc directives
+autodoc_default_options = {
+    "members": True,
+    "show-inheritance": True,
+}
+
+# Disable imports that cause crashes
+autodoc_mock_imports = [
+    # "qtpy.QtGui",
+    # "qdarkstyle",
+    # "qstylizer",
+]
+
+# Generate autosummaries if the autodoc tag is passed
+# pylint: disable-next = undefined-variable
+if "autodoc" in tags:  # noqa: F821
+    autosummary_generate = True
+else:
+    autosummary_generate = False
+    suppress_warnings += ["autodoc", "autosummary", "toc.excluded"]
+    exclude_patterns += ["reference.rst"]
 
 
 # -- Additional Directives ---------------------------------------------------
@@ -299,7 +328,6 @@ class Youtube(IFrameVideo):
             '<iframe src="https://www.youtube.com/embed/%(video_id)s',
             '?start=%(start)s" ',
             'width="%(width)u" height="%(height)u" frameborder="0" ',
-            # pylint: disable = inconsistent-quotes
             "webkitAllowFullScreen mozallowfullscreen allowfullscreen ",
             'class="align-%(align)s"></iframe></div></div>',
         ]

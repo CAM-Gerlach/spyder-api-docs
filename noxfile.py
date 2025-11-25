@@ -4,15 +4,16 @@
 import contextlib
 import logging
 import os
-import tempfile
 import shutil
 import sys
+import tempfile
 import webbrowser
 from pathlib import Path
 
 # Third party imports
-import nox  # pylint: disable=import-error
-import nox.logger  # pylint: disable=import-error
+import nox
+import nox.logger
+import packaging.requirements
 
 
 # --- Global constants --- #
@@ -29,7 +30,7 @@ REPO_URL_HTTPS = "https://github.com/{user}/{repo}.git"
 REPO_URL_SSH = "git@github.com:{user}/{repo}.git"
 
 # Build config
-BUILD_INVOCATION = ("python", "-m", "sphinx")
+BUILD_INVOCATION = ("python", "-I", "-m", "sphinx")
 SOURCE_DIR = Path("docs").resolve()
 BUILD_DIR = Path("docs/_build").resolve()
 BUILD_OPTIONS = ("-n", "-W", "--keep-going")
@@ -56,12 +57,30 @@ DEFAULT_VERSION_NAME = "current"
 BASE_URL = "https://spyder-ide.github.io/spyder-api-docs/"
 
 # Other config
-CANARY_COMMAND = ("pre-commit", "--version")
+# pylint: disable-next = consider-using-namedtuple-or-dataclass
+CANARY_COMMANDS = {
+    "doc": {
+        "cmd": ("pre-commit", "--version"),
+        "default": True,
+        "env": {},
+    },
+    "autodoc": {
+        "cmd": ("python", "-I", "-m", "spyder.app.start", "--help"),
+        "default": False,
+        "env": {"HOME": str(Path().home())},
+    },
+}
 IGNORE_REVS_FILE = ".git-blame-ignore-revs"
 PRE_COMMIT_VERSION_SPEC = ">=2.10.0,<4"
 
 # Custom config
 SCRIPT_DIR = Path("scripts").resolve()
+AUTOSUMMARY_DIR = SOURCE_DIR / "_autosummary"
+SPYDER_PATH = Path("spyder").resolve()
+DEPS_PATH = SPYDER_PATH / "external-deps"
+
+# Post config
+DIRS_TO_CLEAN = [BUILD_DIR, AUTOSUMMARY_DIR]
 
 
 # ---- Helpers ---- #
@@ -145,6 +164,9 @@ def construct_sphinx_invocation(
     builder = builders[-1] if builders else builder
     build_dir = BUILD_DIR / builder if build_dir is None else build_dir
 
+    if "autodoc" in cli_options:
+        build_options = [item for item in build_options if item != "-W"]
+
     if CI:
         build_options = list(build_options) + ["--color"]
 
@@ -163,6 +185,43 @@ def construct_sphinx_invocation(
     return sphinx_invocation
 
 
+def list_spyder_dev_repos():
+    """List the development repos included as subrepos of Spyder."""
+    repos = []
+    for p in [SPYDER_PATH] + list(DEPS_PATH.iterdir()):
+        if (
+            p.name.startswith(".")
+            or not p.is_dir()
+            and not (
+                (p / "setup.py").exists() or (p / "pyproject.toml").exists()
+            )
+        ):
+            continue
+
+        repos.append(p)
+    return repos
+
+
+def get_python_lsp_version():
+    """Get current version to pass it to setuptools-scm."""
+    req_file = SPYDER_PATH / "requirements" / "main.yml"
+    with open(req_file, "r", encoding="UTF-8") as f:
+        for line in f:
+            if "python-lsp-server" not in line:
+                continue
+            parts = line.split("-")[-1]
+            specifiers = packaging.requirements.Requirement(parts).specifier
+            break
+        else:
+            return "0.0.0"
+
+    for specifier in specifiers:
+        if "=" in specifier.operator:
+            return specifier.version
+
+    return "0.0.0"
+
+
 # ---- Dispatch ---- #
 
 
@@ -176,16 +235,28 @@ def _execute(session):
             "Must pass a list of functions to execute as first posarg"
         )
 
+    canary_commands = {}
+    install_tags = set()
+    for arg, properties in CANARY_COMMANDS.items():
+        cmd = properties["cmd"]
+        if properties["default"] or arg in session.posargs:
+            canary_commands[arg] = cmd
+        env = properties["env"] if properties["env"] else None
+
     if not session.posargs or session.posargs[0] is not _install:
-        # pylint: disable=too-many-try-statements
-        try:
-            with set_log_level():
-                session.run(
-                    *CANARY_COMMAND, include_outer_env=False, silent=True
-                )
-        except nox.command.CommandFailed:
-            print("Installing dependencies in isolated environment...")
-            _install(session, use_posargs=False)
+        for arg, cmd in canary_commands.items():
+            # pylint: disable=too-many-try-statements
+            try:
+                with set_log_level():
+                    session.run(
+                        *cmd, env=env, include_outer_env=False, silent=True
+                    )
+            except nox.command.CommandFailed:
+                install_tags.add(arg)
+
+    if install_tags:
+        print("Installing dependencies in isolated environment...")
+        _install(session, use_posargs=False, install_tags=install_tags)
 
     if session.posargs:
         for task in session.posargs[0]:
@@ -195,11 +266,47 @@ def _execute(session):
 # ---- Install ---- #
 
 
-def _install(session, *, use_posargs=True):
-    """Execute the dependency installation."""
-    posargs = session.posargs[1:] if use_posargs else ()
+def _install_doc(session, posargs=()):
+    """Install the basic documentation and dev dependencies."""
     session.install(f"pre-commit{PRE_COMMIT_VERSION_SPEC}")
     session.install("-r", "requirements.txt", *posargs)
+
+
+def _install_autodoc(session, posargs=()):
+    """Install the dependencies to generate API autodocs."""
+    dev_repos = list_spyder_dev_repos()
+    for dev_repo in dev_repos:
+        env = None
+        if "python-lsp-server" in str(dev_repo):
+            env = {**os.environ}
+            env.update(
+                {"SETUPTOOLS_SCM_PRETEND_VERSION": get_python_lsp_version()}
+            )
+        session.install("-e", dev_repo, *posargs, env=env)
+
+
+INSTALL_FUNCTIONS = {
+    "doc": _install_doc,
+    "autodoc": _install_autodoc,
+}
+
+
+def _install(session, *, use_posargs=True, install_tags=None):
+    """Execute the dependency installation."""
+    posargs = session.posargs[1:] if use_posargs else ()
+
+    install_tags = {"doc"} if install_tags is None else install_tags
+    for arg in CANARY_COMMANDS:
+        if f"--{arg}" in session.posargs:
+            install_tags.add(arg)
+            if posargs:
+                posargs.remove(f"--{arg}")
+        # pylint: disable-next = confusing-consecutive-elif
+        elif arg in session.posargs:
+            install_tags.add(arg)
+
+    for tag in install_tags:
+        INSTALL_FUNCTIONS[tag](session, posargs)
 
 
 @nox.session
@@ -230,7 +337,7 @@ def _run(session):
     session.run(*posargs)
 
 
-@nox.session()
+@nox.session
 def run(session):
     """Run any command."""
     session.notify("_execute", posargs=([_run], *session.posargs))
@@ -238,23 +345,43 @@ def run(session):
 
 def _clean(session):
     """Remove the build directory."""
-    print(f"Removing build directory {BUILD_DIR.as_posix()!r}")
     ignore_flag = "--ignore"
     should_ignore = ignore_flag in session.posargs
 
-    try:
-        shutil.rmtree(BUILD_DIR, ignore_errors=should_ignore)
-    except FileNotFoundError:
-        pass
-    except Exception:
-        print(f"\nError removing files; pass {ignore_flag!r} flag to ignore\n")
-        raise
+    for dir_to_clean in DIRS_TO_CLEAN:
+        if not dir_to_clean.exists():
+            continue
+        print(f"Removing generated directory {dir_to_clean.as_posix()!r}")
+        try:
+            shutil.rmtree(dir_to_clean, ignore_errors=should_ignore)
+        except FileNotFoundError:
+            pass
+        except Exception:
+            print(f"\nError removing files in {dir_to_clean.as_posix()!r}")
+            print(f"Pass {ignore_flag!r} flag to ignore\n")
+            raise
 
 
 @nox.session
 def clean(session):
     """Clean build artifacts (pass -i/--ignore to ignore errors)."""
     _clean(session)
+
+
+def _sync_spyder(session):
+    """Sync the latest docstrings from upstream Spyder into the submodule."""
+    foreach_cmd = ["git", "submodule", "--quiet", "foreach"]
+    session.run(
+        *foreach_cmd,
+        "git fetch upstream 6.x && git rebase FETCH_HEAD",
+        external=True,
+    )
+
+
+@nox.session(name="sync-spyder")
+def sync_spyder(session):
+    """Sync the latest docstrings from upstream Spyder into the submodule."""
+    _sync_spyder(session)
 
 
 # --- Set up --- #
@@ -323,6 +450,43 @@ def setup_remotes(session):
     _setup_remotes(session)
 
 
+def _setup_submodule_remotes(session):
+    """Set up the upstream submodule remote to point to the Spyder repo."""
+    foreach_cmd = ["git", "submodule", "--quiet", "foreach"]
+    spyder_repo = "spyder"
+
+    # Check if an upstream remote already exists
+    existing_remotes = (
+        session.run(
+            *foreach_cmd,
+            "git remote",
+            external=True,
+            silent=True,
+            log=False,
+        )
+        .strip()
+        .split("\n")
+    )
+
+    if "upstream" in existing_remotes:
+        return
+
+    spyder_repo_url = REPO_URL_HTTPS.format(user=ORG_NAME, repo=spyder_repo)
+    session.run(
+        *foreach_cmd,
+        f"git remote add upstream '{spyder_repo_url}'",
+        external=True,
+    )
+
+    session.run(*foreach_cmd, "git fetch --all", external=True)
+
+
+@nox.session(name="setup-submodule-remotes")
+def setup_submodule_remotes(session):
+    """Set up the upstream submodule remote to point to the Spyder repo."""
+    _setup_submodule_remotes(session)
+
+
 def _ignore_revs(session):
     """Configure the Git ignore revs file to the repo default."""
     if not IGNORE_REVS_FILE:
@@ -342,7 +506,50 @@ def ignore_revs(session):
     _ignore_revs(session)
 
 
-@nox.session()
+def _config_submodules(session):
+    """Configure Git to automatically recurse into Git submodules."""
+    session.run(
+        "git",
+        "config",
+        "--local",
+        "submodule.recurse",
+        "true",
+        external=True,
+    )
+    session.run(
+        "git",
+        "config",
+        "--local",
+        "push.recurseSubmodules",
+        "check",
+        external=True,
+    )
+
+
+@nox.session(name="config-submodules")
+def config_submodules(session):
+    """Initialize and download all Git submodules."""
+    _config_submodules(session)
+
+
+def _init_submodules(session):
+    """Initialize and download all Git submodules."""
+    session.run(
+        "git",
+        "submodule",
+        "update",
+        "--init",
+        external=True,
+    )
+
+
+@nox.session(name="init-submodules")
+def init_submodules(session):
+    """Initialize and download all Git submodules."""
+    _init_submodules(session)
+
+
+@nox.session
 def setup(session):
     """Set up the project; pass --https or --ssh to specify Git URL type."""
     session.notify(
@@ -350,6 +557,9 @@ def setup(session):
         posargs=(
             [
                 _ignore_revs,
+                _config_submodules,
+                _init_submodules,
+                _setup_submodule_remotes,
                 _setup_remotes,
                 _install_hooks,
                 _clean,
@@ -373,15 +583,15 @@ def build(session):
     session.notify("_execute", posargs=([_build], *session.posargs))
 
 
-def _autobuild(session):
+def _autorebuild(session):
     """Use Sphinx-Autobuild to rebuild the project and open in browser."""
-    _autodocs(session)
+    _docs_autobuild(session)
 
 
 @nox.session
-def autobuild(session):
+def autorebuild(session):
     """Rebuild the project continuously as source files are changed."""
-    session.notify("_execute", posargs=([_autobuild], *session.posargs))
+    session.notify("_execute", posargs=([_autorebuild], *session.posargs))
 
 
 # --- Docs --- #
@@ -401,7 +611,7 @@ def docs(session):
     session.notify("_execute", posargs=([_docs], *session.posargs))
 
 
-def _autodocs(session):
+def _docs_autobuild(session):
     """Use Sphinx-Autobuild to rebuild the project and open in browser."""
     session.install("sphinx-autobuild")
 
@@ -420,10 +630,10 @@ def _autodocs(session):
         session.run(*sphinx_invocation)
 
 
-@nox.session
-def autodocs(session):
+@nox.session(name="docs-autobuild")
+def docs_autobuild(session):
     """Rebuild the docs continuously as source files are changed."""
-    session.notify("_execute", posargs=([_autodocs], *session.posargs))
+    session.notify("_execute", posargs=([_docs_autobuild], *session.posargs))
 
 
 def _build_languages(session):
@@ -485,7 +695,6 @@ def serve_docs(_session):
 def _prepare_multiversion(_session=None):
     """Execute the pre-deployment steps for multi-version support."""
     # pylint: disable=import-outside-toplevel
-    # pylint: disable=import-error
 
     sys.path.append(str(SCRIPT_DIR))
     import generateredirects

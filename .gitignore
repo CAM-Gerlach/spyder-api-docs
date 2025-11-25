@@ -110,7 +110,9 @@ instance/
 .scrapy
 
 # Sphinx documentation
+doc/_autosummary/
 doc/_build/
+docs/_autosummary/
 docs/_build/
 
 # PyBuilder
