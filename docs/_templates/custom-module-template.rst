@@ -55,7 +55,8 @@
    :template: custom-module-template.rst
    :recursive:
 {% for item in modules %}
-   {% if not 'tests' in item %}
+   {%- set item_fullname %}{{ fullname }}.{{ item }}{% endset %}
+   {%- if not (ignore_module_pattern in item or item_fullname in ignore_modules) %}
        {{ item }}
    {%- endif %}
 {%- endfor %}

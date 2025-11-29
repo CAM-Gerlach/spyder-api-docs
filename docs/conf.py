@@ -256,6 +256,17 @@ autodoc_mock_imports = [
     # "qstylizer",
 ]
 
+# Set list of modules and patterns to ignore in the autosummary template
+autosummary_context = {
+    "ignore_module_pattern": "tests",
+    "ignore_modules": [
+        "spyder.api.editor",
+        "spyder.api.plugins.enum",
+        "spyder.api.plugins.new_api",
+        "spyder.api.plugins.tests",
+    ],
+}
+
 # Generate autosummaries if the autodoc tag is passed
 # pylint: disable-next = undefined-variable
 if "autodoc" in tags:  # noqa: F821
