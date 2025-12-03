@@ -17,6 +17,7 @@
 
 # Standard library imports
 import datetime
+import os
 import sys
 from pathlib import Path
 
@@ -246,6 +247,9 @@ autodoc_member_order = "bysource"
 # Default flags used by autodoc directives
 autodoc_default_options = {
     "members": True,
+    "private-members": "_",
+    "special-members": True,
+    "exclude-members": "__weakref__",
     "show-inheritance": True,
 }
 
@@ -271,6 +275,7 @@ autosummary_context = {
 # pylint: disable-next = undefined-variable
 if "autodoc" in tags:  # noqa: F821
     autosummary_generate = True
+    os.environ["SPHINX_AUTODOC"] = "1"
 else:
     autosummary_generate = False
     suppress_warnings += ["autodoc", "autosummary", "toc.excluded"]
