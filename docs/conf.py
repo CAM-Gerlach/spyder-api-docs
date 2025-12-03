@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).parents[1].resolve() / "spyder"))
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-needs_sphinx = "5"
+needs_sphinx = "6.2"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named "sphinx.ext.*") or your custom ones.
@@ -103,8 +103,36 @@ todo_include_todos = False
 # pylint: disable-next = consider-using-namedtuple-or-dataclass
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
+    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None),
     "spyder": ("https://docs.spyder-ide.org/current/", None),
 }
+
+# Warning suppression
+suppress_warnings = []
+
+# Nitpick warning ignore list
+nitpick_ignore_regex = {
+    # Spyder modules currently not included in the build
+    (
+        "py:.+",
+        # pylint: disable-next = line-too-long
+        "spyder.(app|config|fonts|images|locale|plugins|tests|utils|widgets|windows).*",  # noqa: E501
+    ),
+    # Numpydoc optional
+    ("py:class", "optional"),
+    # Typing params
+    ("py:.+", ".*_P"),
+    ("py:.+", ".*_RT"),
+    ("py:.+", ".*_T"),
+    # Cannot use type aliases to fix refs inside type aliases or class bases
+    ("py:class", "asyncio.events.AbstractEventLoop"),
+    ("py:class", "concurrent.futures._base.Future"),
+    # Type aliases don't work properly in Sphinx <9
+    ("py:class", "LoopID"),
+    ("py:class", "OptionSet"),
+    ("py:class", "spyder.api.preferences.OptionSet"),
+}
+
 
 # -- Options for HTML output -------------------------------------------
 
@@ -134,9 +162,6 @@ html_favicon = "_static/favicon.ico"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-
-# Warning suppression
-suppress_warnings = []
 
 
 # -- Options for HTMLHelp output ---------------------------------------
@@ -260,6 +285,28 @@ autodoc_mock_imports = [
     # "qstylizer",
 ]
 
+# Configure type aliases for signatures
+autodoc_type_aliases = {
+    # Actual type aliases
+    "LoopID": "spyder.api.asyncdispatcher.LoopID",
+    "OptionSet": "spyder.api.preferences.OptionSet",
+    # Ref name aliases
+    "AbstractEventLoop": "asyncio.AbstractEventLoop",
+    "asyncio.AbstractEventLoop": "asyncio.AbstractEventLoop",
+    "asyncio.events.AbstractEventLoop": "asyncio.AbstractEventLoop",
+    "Future": "concurrent.futures.Future",
+    "concurrent.futures.Future": "concurrent.futures.Future",
+    "concurrent.futures._base.Future": "concurrent.futures.Future",
+}
+
+# Monkeypatch to fix type aliases not working in classmethods with Sphinx
+# See sphinx-doc/sphinx#10333
+# pylint: disable-next = wrong-import-position
+from sphinx.util import inspect  # noqa: E402
+
+inspect.TypeAliasForwardRef.__repr__ = lambda self: self.name
+inspect.TypeAliasForwardRef.__hash__ = lambda self: hash(self.name)
+
 # Set list of modules and patterns to ignore in the autosummary template
 autosummary_context = {
     "ignore_module_pattern": "tests",
@@ -276,10 +323,11 @@ autosummary_context = {
 if "autodoc" in tags:  # noqa: F821
     autosummary_generate = True
     os.environ["SPHINX_AUTODOC"] = "1"
+    extensions.append("sphinx_qt_documentation")  # Errors out w/o Qt installed
 else:
     autosummary_generate = False
-    suppress_warnings += ["autodoc", "autosummary", "toc.excluded"]
     exclude_patterns += ["reference.rst"]
+    suppress_warnings += ["autodoc", "autosummary", "toc.excluded"]
 
 
 # -- Additional Directives ---------------------------------------------------
