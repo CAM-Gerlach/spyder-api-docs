@@ -128,6 +128,10 @@ nitpick_ignore_regex = {
     ("py:class", "asyncio.events.AbstractEventLoop"),
     ("py:class", "concurrent.futures._base.Future"),
     # Type aliases don't work properly in Sphinx <9
+    ("py:class", "BasicTypes"),
+    ("py:class", "spyder.api.config.mixins.BasicTypes"),
+    ("py:class", "ConfigurationKeyOrList"),
+    ("py:class", "spyder.api.config.decorators.ConfigurationKeyOrList"),
     ("py:class", "LoopID"),
     ("py:class", "OptionSet"),
     ("py:class", "spyder.api.preferences.OptionSet"),
@@ -288,6 +292,14 @@ autodoc_mock_imports = [
 # Configure type aliases for signatures
 autodoc_type_aliases = {
     # Actual type aliases
+    "BasicTypes": "spyder.api.config.mixins.BasicTypes",
+    "ConfigurationKey": "spyder.config.types.ConfigurationKey",
+    "ConfigurationKeyList": (
+        "spyder.api.config.decorators.ConfigurationKeyList"
+    ),
+    "ConfigurationKeyOrList": (
+        "spyder.api.config.decorators.ConfigurationKeyOrList"
+    ),
     "LoopID": "spyder.api.asyncdispatcher.LoopID",
     "OptionSet": "spyder.api.preferences.OptionSet",
     # Ref name aliases
