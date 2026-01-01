@@ -118,6 +118,8 @@ nitpick_ignore_regex = {
         # pylint: disable-next = line-too-long
         "spyder.(app|config|fonts|images|locale|plugins|tests|utils|widgets|windows).*",  # noqa: E501
     ),
+    # Private APIs
+    ("py:class", "spyder.api.widgets.comboboxes._SpyderComboBoxMixin"),
     # Numpydoc optional
     ("py:class", "optional"),
     # Typing params
@@ -137,6 +139,8 @@ nitpick_ignore_regex = {
     ("py:class", "spyder.api.preferences.OptionSet"),
     ("py:class", "SpyderPluginClass"),
     ("py:class", "spyder.api.plugin_registration.registry.SpyderPluginClass"),
+    ("py:class", "ToolbarItem"),
+    ("py:class", "spyder.api.widgets.toolbars.ToolbarItem"),
 }
 
 
@@ -307,6 +311,8 @@ autodoc_type_aliases = {
     "SpyderPluginClass": (
         "spyder.api.plugin_registration.registry.SpyderPluginClass"
     ),
+    "ToolbarItem": "spyder.api.widgets.toolbars.ToolbarItem",
+    "ToolbarItemEntry": "spyder.api.widgets.toolbars.ToolbarItemEntry",
     # Ref name aliases
     "AbstractEventLoop": "asyncio.AbstractEventLoop",
     "asyncio.AbstractEventLoop": "asyncio.AbstractEventLoop",
